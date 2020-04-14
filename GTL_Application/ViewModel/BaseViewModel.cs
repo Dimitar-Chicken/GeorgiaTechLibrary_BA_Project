@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GTL_Application.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,6 +10,19 @@ namespace GTL_Application.ViewModel
     class BaseViewModel : INotifyPropertyChanged
     {
 
+        #region Property Processing
+        protected bool SetProperty<T>(ref T backingStore, T value,
+           [CallerMemberName]string propertyName = "",
+           Action onChanged = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -21,5 +35,6 @@ namespace GTL_Application.ViewModel
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion Property
     }
 }
