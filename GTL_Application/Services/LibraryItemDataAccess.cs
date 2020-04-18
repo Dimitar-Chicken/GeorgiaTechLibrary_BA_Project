@@ -33,7 +33,7 @@ namespace GTL_Application
             connection.Open();
 
 
-            string query = "SELECT * FROM LibraryItem";
+            string query = "SELECT * FROM LibraryItems.LibraryItem";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
