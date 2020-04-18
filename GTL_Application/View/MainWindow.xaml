@@ -12,18 +12,20 @@
         Width="800"
         WindowState="Maximized"
         d:DataContext="{d:DesignInstance SampleData:MainWindowSampleData, IsDesignTimeCreatable=True}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
         <StackPanel>
             <Button Content="Refresh"
-                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
                     Click="Button_Click"
                     Command="{Binding Path=GetLibraryItemsListCommand}"/>
             <ListView ItemsSource="{Binding LibraryItems}"
-                      Height="Auto"
+                      HorizontalAlignment="Stretch"
                       Background="Gray">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Background" Value="White"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
