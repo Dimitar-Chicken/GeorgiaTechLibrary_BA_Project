@@ -7,29 +7,20 @@ namespace GTL_Application
 {
     public class LibraryItemDataAccess
     {
-        string connectionString;
-        SqlConnection connection;
+        private string connectionString;
 
         public LibraryItemDataAccess()
         {
-            connectionString = @"Server=ANOOBIS-DESKTOP\SQL2019; Database=GeorgiaTechLibrary_BA_Project_DB; User Id=sa; Password=1234;";
-
-            connection = new SqlConnection(connectionString);
-            connection.Open();
-        }
-
-        public void OpenConnection()
-        {
-            connection = new SqlConnection(connectionString);
-            connection.Open();
-
+            connectionString = @"Server=ANOOBIS-DESKTOP\SQL2019;" +
+                                "Database=GeorgiaTechLibrary_BA_Project_DB;" +
+                                "User Id=sa;" +
+                                "Password=1234;";
         }
 
         public List<LibraryItem> GetLibraryItemList()
         {
+            using SqlConnection connection = new SqlConnection(connectionString);
             List<LibraryItem> libraryItems = new List<LibraryItem>();
-
-            connection = new SqlConnection(connectionString);
             connection.Open();
 
 
@@ -40,7 +31,7 @@ namespace GTL_Application
             while (dataReader.Read())
             {
                 LibraryItem libraryItem = new LibraryItem();
-                
+
                 libraryItem.Title = dataReader["Title"].ToString();
                 libraryItem.Author = dataReader["Author"].ToString();
                 libraryItem.SubjectArea = dataReader["SubjectArea"].ToString();
@@ -49,6 +40,7 @@ namespace GTL_Application
 
                 libraryItems.Add(libraryItem);
             }
+            connection.Close();
 
             return libraryItems;
         }
