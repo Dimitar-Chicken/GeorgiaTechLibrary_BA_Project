@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace GTL_Application.ViewModel
 {
-    class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
         public string Title { get; set; }
 

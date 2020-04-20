@@ -7,7 +7,7 @@ using System.Text;
 
 namespace GTL_Application.ViewModel
 {
-    class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged
     {
 
         #region Property Processing
