@@ -47,6 +47,14 @@
                                        Fill="Red"
                                        Width="120"
                                        Height="80"/>
+                            <TextBlock Grid.Column="0"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="3"
+                                       Text="Placeholder For Image"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Width="120"
+                                       Height="80"/>
                             <TextBlock Grid.Row="0"
                                        Grid.Column="1"
                                        Style="{StaticResource HeaderStyle}"
