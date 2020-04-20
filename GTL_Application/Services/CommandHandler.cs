@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 
-namespace GTL_Application.ViewModel
+namespace GTL_Application.Services
 {
     class CommandHandler : ICommand
     {
