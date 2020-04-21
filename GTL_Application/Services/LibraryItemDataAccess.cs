@@ -1,6 +1,7 @@
 ﻿using GTL_Application.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 
 namespace GTL_Application
@@ -17,10 +18,10 @@ namespace GTL_Application
                                 "Password=1234;";
         }
 
-        public List<LibraryItem> GetLibraryItemList()
+        public ObservableCollection<LibraryItem> GetLibraryItemList()
         {
             using SqlConnection connection = new SqlConnection(connectionString);
-            List<LibraryItem> libraryItems = new List<LibraryItem>();
+            ObservableCollection<LibraryItem> libraryItems = new ObservableCollection<LibraryItem>();
             connection.Open();
 
 
@@ -30,13 +31,14 @@ namespace GTL_Application
 
             while (dataReader.Read())
             {
-                LibraryItem libraryItem = new LibraryItem();
-
-                libraryItem.Title = dataReader["Title"].ToString();
-                libraryItem.Author = dataReader["Author"].ToString();
-                libraryItem.SubjectArea = dataReader["SubjectArea"].ToString();
-                libraryItem.ItemDescription = dataReader["ItemDescription"].ToString();
-                // libraryItem.TypeName = dataReader["LibraryItemType"].ToString();
+                LibraryItem libraryItem = new LibraryItem
+                {
+                    Title = dataReader["Title"].ToString(),
+                    Author = dataReader["Author"].ToString(),
+                    SubjectArea = dataReader["SubjectArea"].ToString(),
+                    ItemDescription = dataReader["ItemDescription"].ToString()
+                    // TypeName = dataReader["LibraryItemType"].ToString();
+                };
 
                 libraryItems.Add(libraryItem);
             }
