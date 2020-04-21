@@ -19,7 +19,13 @@
                     HorizontalAlignment="Stretch"
                     Click="Button_Click"
                     Command="{Binding Path=GetLibraryItemsListCommand}"/>
-            <ListView ItemsSource="{Binding LibraryItems}"
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Stretch"
+                     TextChanged="TextBox_TextChanged"
+                     IsKeyboardFocusedChanged="TextBox_IsKeyboardFocusedChanged"
+                     GotFocus="TogglePlaceholderTextEvent"
+                     TextWrapping="Wrap"/>
+            <ListView ItemsSource="{Binding SourceCollection}"
                       HorizontalAlignment="Stretch"
                       Background="Gray">
                 <ListView.ItemContainerStyle>
