@@ -1,3 +1,4 @@
+using GTL_Application;
 using GTL_Application.Model;
 using GTL_Application.ViewModel;
 using Microsoft.Win32.SafeHandles;
@@ -10,28 +11,48 @@ namespace GTL_Test
 
     public class ViewModelTests : IDisposable
     {
-        bool disposed = false;
-        SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
-        MainWindowViewModel mainWindowViewModel;
-        public ViewModelTests()
-        {
-            mainWindowViewModel = new MainWindowViewModel();
-        }
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposed)
-                return;
-            if (disposing)
+            if (!disposedValue)
             {
-                handle.Dispose();
-            }
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
 
-            disposed = true;
+                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~ViewModelTests()
+        // {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        readonly LibraryItemDataAccess libraryItemDataAccess;
+        readonly MainWindowViewModel mainWindowViewModel;
+        public ViewModelTests()
+        {
+            libraryItemDataAccess = new LibraryItemDataAccess();
+            mainWindowViewModel = new MainWindowViewModel(libraryItemDataAccess);
         }
 
         [Fact]
