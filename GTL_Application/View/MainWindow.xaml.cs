@@ -29,10 +29,5 @@ namespace GTL_Application
             InitializeComponent();
             mainWindowViewModel.GetLibraryItemsList();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

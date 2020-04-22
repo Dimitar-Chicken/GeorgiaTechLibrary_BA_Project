@@ -21,9 +21,6 @@
                     Command="{Binding Path=GetLibraryItemsListCommand}"/>
             <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      HorizontalAlignment="Stretch"
-                     TextChanged="TextBox_TextChanged"
-                     IsKeyboardFocusedChanged="TextBox_IsKeyboardFocusedChanged"
-                     GotFocus="TogglePlaceholderTextEvent"
                      TextWrapping="Wrap"/>
             <ListView ItemsSource="{Binding SourceCollection}"
                       HorizontalAlignment="Stretch"
