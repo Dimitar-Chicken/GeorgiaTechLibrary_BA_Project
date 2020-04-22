@@ -23,11 +23,23 @@ namespace GTL_Application
     public partial class MainWindow : Window
     {
         MainWindowViewModel mainWindowViewModel;
+        LibraryItemsListViewModel libraryItemsListViewModel;
+        BorrowedItemsListViewModel borrowedItemsListViewModel;
+        PeopleListViewModel peopleListViewModel;
         public MainWindow()
         {
-            DataContext = mainWindowViewModel = new MainWindowViewModel();
             InitializeComponent();
-            mainWindowViewModel.GetLibraryItemsList();
+
+            // Setting the DataContext to the tabs to be the appropriate ViewModels.
+            mainWindowViewModel = new MainWindowViewModel();
+            libraryItemsListViewModel = new LibraryItemsListViewModel();
+            borrowedItemsListViewModel = new BorrowedItemsListViewModel();
+            peopleListViewModel = new PeopleListViewModel();
+
+            this.DataContext = mainWindowViewModel;
+            LibraryItemListTab.DataContext = libraryItemsListViewModel;
+            BorrowedItemsTab.DataContext = borrowedItemsListViewModel;
+            PeopleTab.DataContext = peopleListViewModel;
         }
     }
 }
