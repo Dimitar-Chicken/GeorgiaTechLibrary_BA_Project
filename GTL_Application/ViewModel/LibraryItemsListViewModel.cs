@@ -11,20 +11,20 @@ namespace GTL_Application.ViewModel
     public class LibraryItemsListViewModel : MainWindowViewModel
     {
         private string _searchText;
-        protected readonly LibraryItemDataAccess _libraryItemDataAccess;
+        protected readonly DataAccess _dataAccess;
         private ObservableCollection<LibraryItem> _libraryItems;
         private CollectionViewSource _libraryItemsCollection;
         private ICommand _getLibraryItemsListCommand;
 
         public LibraryItemsListViewModel()
         {
-            _libraryItemDataAccess = new LibraryItemDataAccess();
+            _dataAccess = new DataAccess();
             InitializeAll();
         }
 
-        public LibraryItemsListViewModel(LibraryItemDataAccess mockLibraryItemDataAccess)
+        public LibraryItemsListViewModel(DataAccess mockDataAccess)
         {
-            _libraryItemDataAccess = mockLibraryItemDataAccess;
+            _dataAccess = mockDataAccess;
             InitializeAll();
         }
 
@@ -36,7 +36,7 @@ namespace GTL_Application.ViewModel
             {
                 Source = LibraryItems
             };
-            _libraryItemsCollection.Filter += LibraryItemsCollection_Filter;
+            _libraryItemsCollection.Filter += (sender, FilterEventArgs) => { CollectionFilter(sender, FilterEventArgs, SearchText); };
         }
 
         public string SearchText
@@ -74,42 +74,9 @@ namespace GTL_Application.ViewModel
             }
         }
 
-
-        private void LibraryItemsCollection_Filter(object sender, FilterEventArgs e)
-        {
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                e.Accepted = true;
-                return;
-            }
-
-            LibraryItem libraryItem = e.Item as LibraryItem;
-
-            // Gather a list of all the properties of the LibraryItem object instance.
-            PropertyInfo[] props = libraryItem.GetType().GetProperties();
-            // Iterate over the individual properties and retrieve the values using the Get methods.
-            foreach (var p in props)
-            {
-                var val = p.GetValue(libraryItem);
-                if (val == null)
-                    return;
-
-                // If the property contains the SearchText string, set the FilterEventArgs Accepted flag to true in order to display it in the Collection.
-                if (val.ToString().ToUpper().Contains(SearchText.ToUpper()))
-                {
-                    e.Accepted = true;
-                    return;
-                }
-                else
-                {
-                    e.Accepted = false;
-                }
-            }
-        }
-
         public void GetLibraryItemsList()
         {
-            LibraryItems = _libraryItemDataAccess.GetLibraryItemList();
+            LibraryItems = _dataAccess.GetLibraryItemList();
         }
 
     }
