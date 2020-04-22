@@ -49,24 +49,26 @@ namespace GTL_Test
 
         readonly LibraryItemDataAccess libraryItemDataAccess;
         readonly MainWindowViewModel mainWindowViewModel;
+        readonly LibraryItemsListViewModel libraryItemsListViewModel;
         public ViewModelTests()
         {
             libraryItemDataAccess = new LibraryItemDataAccess();
-            mainWindowViewModel = new MainWindowViewModel(libraryItemDataAccess);
+            mainWindowViewModel = new MainWindowViewModel();
+            libraryItemsListViewModel = new LibraryItemsListViewModel();
         }
 
         [Fact]
         public void GetLibraryItemsListCommandTest_Passes()
         {
-            mainWindowViewModel.GetLibraryItemsListCommand.Execute(null);
-            Assert.NotEmpty(mainWindowViewModel.LibraryItems);
+            libraryItemsListViewModel.GetLibraryItemsListCommand.Execute(null);
+            Assert.NotEmpty(libraryItemsListViewModel.LibraryItems);
         }
 
         [Fact]
         public void GetLibraryItemsListTest_Passes()
         {
-            mainWindowViewModel.GetLibraryItemsList();
-            Assert.NotEmpty(mainWindowViewModel.LibraryItems);
+            libraryItemsListViewModel.GetLibraryItemsList();
+            Assert.NotEmpty(libraryItemsListViewModel.LibraryItems);
         }
     }
 }
