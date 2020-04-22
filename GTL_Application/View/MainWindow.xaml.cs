@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GTL_Application.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,15 @@ namespace GTL_Application
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    
     public partial class MainWindow : Window
     {
+        MainWindowViewModel mainWindowViewModel;
         public MainWindow()
         {
+            DataContext = mainWindowViewModel = new MainWindowViewModel();
             InitializeComponent();
+            mainWindowViewModel.GetLibraryItemsList();
         }
     }
 }

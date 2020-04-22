@@ -1,0 +1,98 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GTL_Application"
+        xmlns:ViewModel="clr-namespace:GTL_Application.ViewModel"
+        xmlns:SampleData="clr-namespace:GTL_Application.SampleData"
+        x:Class="GTL_Application.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="400"
+        Width="800"
+        WindowState="Maximized"
+        d:DataContext="{d:DesignInstance SampleData:MainWindowSampleData, IsDesignTimeCreatable=True}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Button Content="Refresh"
+                    HorizontalAlignment="Stretch"
+                    Click="Button_Click"
+                    Command="{Binding Path=GetLibraryItemsListCommand}"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Stretch"
+                     TextWrapping="Wrap"/>
+            <ListView ItemsSource="{Binding SourceCollection}"
+                      HorizontalAlignment="Stretch"
+                      Background="Gray">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Rectangle Grid.Column="0"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="3"
+                                       Fill="Red"
+                                       Width="120"
+                                       Height="80"/>
+                            <TextBlock Grid.Column="0"
+                                       Grid.Row="0"
+                                       Grid.RowSpan="3"
+                                       Text="Placeholder For Image"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       Width="120"
+                                       Height="80"/>
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="1"
+                                       Style="{StaticResource HeaderStyle}"
+                                       Text="{Binding Title}"
+                                       VerticalAlignment="Bottom"
+                                       Margin="5, 0, 5, 0"/>
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="1"
+                                       Style="{StaticResource SubTitleStyle}"
+                                       Text="{Binding Author, StringFormat='by {0}'}"
+                                       VerticalAlignment="Top"
+                                       Margin="5, 0, 5, 0"/>
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="1"
+                                       Text="{Binding SubjectArea}"
+                                       FontSize="10"
+                                       Margin="5, 0, 5, 0"/>
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="1" 
+                                       Text="{Binding TypeName}"
+                                       HorizontalAlignment="Left"
+                                       Margin="5, 0, 5, 0"/>
+                            <Expander Grid.Row="0"
+                                      Grid.Column="2"
+                                      Grid.RowSpan="3"
+                                      Header="Description"
+                                      VerticalAlignment="Center">
+                                <TextBlock Text="{Binding ItemDescription}"
+                                           TextWrapping="Wrap"
+                                           Width="500"/>
+                            </Expander>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
