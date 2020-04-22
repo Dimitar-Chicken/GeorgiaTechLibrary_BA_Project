@@ -47,12 +47,12 @@ namespace GTL_Test
         }
         #endregion
 
-        readonly LibraryItemDataAccess libraryItemDataAccess;
+        readonly DataAccess libraryItemDataAccess;
         readonly MainWindowViewModel mainWindowViewModel;
         readonly LibraryItemsListViewModel libraryItemsListViewModel;
         public ViewModelTests()
         {
-            libraryItemDataAccess = new LibraryItemDataAccess();
+            libraryItemDataAccess = new DataAccess();
             mainWindowViewModel = new MainWindowViewModel();
             libraryItemsListViewModel = new LibraryItemsListViewModel();
         }
