@@ -53,7 +53,7 @@ namespace GTL_Application.ViewModel
             }
         }
 
-        public ICollectionView SourceCollection
+        public ICollectionView LibraryItemBorrowsCollection
         {
             get
             {
