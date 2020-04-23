@@ -12,87 +12,138 @@
         Width="800"
         WindowState="Maximized"
         d:DataContext="{d:DesignInstance SampleData:MainWindowSampleData, IsDesignTimeCreatable=True}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Auto">
-        <StackPanel>
-            <Button Content="Refresh"
-                    HorizontalAlignment="Stretch"
-                    Click="Button_Click"
-                    Command="{Binding Path=GetLibraryItemsListCommand}"/>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     HorizontalAlignment="Stretch"
-                     TextWrapping="Wrap"/>
-            <ListView ItemsSource="{Binding SourceCollection}"
-                      HorizontalAlignment="Stretch"
-                      Background="Gray">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Rectangle Grid.Column="0"
-                                       Grid.Row="0"
-                                       Grid.RowSpan="3"
-                                       Fill="Red"
-                                       Width="120"
-                                       Height="80"/>
-                            <TextBlock Grid.Column="0"
-                                       Grid.Row="0"
-                                       Grid.RowSpan="3"
-                                       Text="Placeholder For Image"
-                                       TextWrapping="Wrap"
-                                       TextAlignment="Center"
-                                       Width="120"
-                                       Height="80"/>
-                            <TextBlock Grid.Row="0"
-                                       Grid.Column="1"
-                                       Style="{StaticResource HeaderStyle}"
-                                       Text="{Binding Title}"
-                                       VerticalAlignment="Bottom"
-                                       Margin="5, 0, 5, 0"/>
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="1"
-                                       Style="{StaticResource SubTitleStyle}"
-                                       Text="{Binding Author, StringFormat='by {0}'}"
-                                       VerticalAlignment="Top"
-                                       Margin="5, 0, 5, 0"/>
-                            <TextBlock Grid.Row="2"
-                                       Grid.Column="1"
-                                       Text="{Binding SubjectArea}"
-                                       FontSize="10"
-                                       Margin="5, 0, 5, 0"/>
-                            <TextBlock Grid.Row="0"
-                                       Grid.Column="1" 
-                                       Text="{Binding TypeName}"
-                                       HorizontalAlignment="Left"
-                                       Margin="5, 0, 5, 0"/>
-                            <Expander Grid.Row="0"
-                                      Grid.Column="2"
-                                      Grid.RowSpan="3"
-                                      Header="Description"
-                                      VerticalAlignment="Center">
-                                <TextBlock Text="{Binding ItemDescription}"
+    <TabControl HorizontalAlignment="Stretch">
+        <TabItem x:Name="LibraryItemListTab"
+                 Header="Library Item List">
+            <StackPanel>
+                <Button Content="Refresh"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding GetLibraryItemsListCommand}"/>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <Label Content="Search:"
+                           DockPanel.Dock="Left"/>
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             TextWrapping="Wrap"
+                             DockPanel.Dock="Top"/>
+                </DockPanel>
+                <ListView ItemsSource="{Binding LibraryItemCollection}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Background="Gray">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Grid.Column="0"
+                                           Grid.Row="0"
+                                           Grid.RowSpan="3"
+                                           Fill="Red"
+                                           Width="120"
+                                           Height="80"/>
+                                <TextBlock Grid.Column="0"
+                                           Grid.Row="0"
+                                           Grid.RowSpan="3"
+                                           Text="Placeholder For Image"
                                            TextWrapping="Wrap"
-                                           Width="500"/>
-                            </Expander>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
-    </ScrollViewer>
+                                           TextAlignment="Center"
+                                           Width="120"
+                                           Height="80"/>
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="1"
+                                           Style="{StaticResource HeaderStyle}"
+                                           Text="{Binding Title}"
+                                           VerticalAlignment="Bottom"
+                                           Margin="5, 0, 5, 0"/>
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="1"
+                                           Style="{StaticResource SubTitleStyle}"
+                                           Text="{Binding Author, StringFormat='by {0}'}"
+                                           VerticalAlignment="Top"
+                                           Margin="5, 0, 5, 0"/>
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="1"
+                                           Text="{Binding SubjectArea}"
+                                           FontSize="10"
+                                           Margin="5, 0, 5, 0"/>
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="1" 
+                                           Text="{Binding TypeName}"
+                                           FontSize="10"
+                                           HorizontalAlignment="Left"
+                                           Margin="5, 0, 5, 0"/>
+                                <Expander Grid.Row="0"
+                                          Grid.Column="2"
+                                          Grid.RowSpan="3"
+                                          Header="Description"
+                                          VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding ItemDescription}"
+                                               TextWrapping="Wrap"
+                                               Width="500"/>
+                                </Expander>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </TabItem>
+        <TabItem x:Name="BorrowedItemsTab"
+                 Header="Borrowed Items">
+            <DockPanel>
+                <Button DockPanel.Dock="Top"
+                        Content="Refresh"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding Path=GetLibraryItemBorrowsListCommand}"/>
+                <DockPanel DockPanel.Dock="Top">
+                    <Label DockPanel.Dock="Left"
+                       Content="Search:"/>
+                    <TextBox DockPanel.Dock="Top"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalAlignment="Center"
+                         TextWrapping="Wrap"/>
+                </DockPanel>
+                <DataGrid DockPanel.Dock="Top"
+                          ItemsSource="{Binding LibraryItemBorrowsCollection}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserReorderColumns="False"
+                          Background="Gray">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"
+                                            Binding="{Binding PersonName}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="ISBN"
+                                            Binding="{Binding ISBN}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Borrow Date"
+                                            Binding="{Binding BorrowDate}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Return Date"
+                                            Binding="{Binding ReturnDate}"
+                                            Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </TabItem>
+        <TabItem x:Name="PeopleTab"
+                 Header="People">
+            
+        </TabItem>
+    </TabControl>
 </Window>

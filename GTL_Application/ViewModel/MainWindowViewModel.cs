@@ -14,70 +14,12 @@ namespace GTL_Application.ViewModel
     public class MainWindowViewModel : BaseViewModel
     {
         public string Title { get; set; }
-        private string _searchText;
-        protected readonly LibraryItemDataAccess _libraryItemDataAccess;
-        private ObservableCollection<LibraryItem> _libraryItems;
-        private CollectionViewSource _libraryItemsCollection;
-        private ICommand _getLibraryItemsListCommand;
         public MainWindowViewModel()
         {
-            _libraryItemDataAccess = new LibraryItemDataAccess();
-            InitializeAll();
-        }
-        public MainWindowViewModel(LibraryItemDataAccess mockLibraryItemDataAccess)
-        {
-            _libraryItemDataAccess = mockLibraryItemDataAccess;
-            InitializeAll();
+            Title = "Test";
         }
 
-        public void InitializeAll()
-        {
-            Title = "Test1";
-            _libraryItems = new ObservableCollection<LibraryItem>();
-            GetLibraryItemsList();
-            _libraryItemsCollection = new CollectionViewSource
-            {
-                Source = LibraryItems
-            };
-            _libraryItemsCollection.Filter += LibraryItemsCollection_Filter;
-        }
-        public string SearchText
-        {
-            get
-            {
-                return _searchText;
-            }
-            set
-            {
-                _searchText = value;
-                _libraryItemsCollection.View.Refresh();
-            }
-        }
-
-        public ICollectionView SourceCollection
-        {
-            get
-            {
-                return _libraryItemsCollection.View;
-            }
-        }
-
-        public ObservableCollection<LibraryItem> LibraryItems
-        {
-            get { return _libraryItems; }
-            set { SetProperty(ref _libraryItems, value); }
-        }
-
-        public ICommand GetLibraryItemsListCommand
-        {
-            get
-            {
-                return _getLibraryItemsListCommand ?? (_getLibraryItemsListCommand = new CommandHandler(() => GetLibraryItemsList(), () => true));
-            }
-        }
-
-
-        private void LibraryItemsCollection_Filter(object sender, FilterEventArgs e)
+        public void CollectionFilter(object sender, FilterEventArgs e, string SearchText)
         {
             if (string.IsNullOrEmpty(SearchText))
             {
@@ -85,14 +27,14 @@ namespace GTL_Application.ViewModel
                 return;
             }
 
-            LibraryItem libraryItem = e.Item as LibraryItem;
-            
+            object objectToFilter = e.Item as object;
+
             // Gather a list of all the properties of the LibraryItem object instance.
-            PropertyInfo[] props = libraryItem.GetType().GetProperties();
+            PropertyInfo[] props = objectToFilter.GetType().GetProperties();
             // Iterate over the individual properties and retrieve the values using the Get methods.
             foreach (var p in props)
             {
-                var val = p.GetValue(libraryItem);
+                var val = p.GetValue(objectToFilter);
                 if (val == null)
                     return;
 
@@ -108,12 +50,5 @@ namespace GTL_Application.ViewModel
                 }
             }
         }
-
-        public void GetLibraryItemsList()
-        {
-            LibraryItems = _libraryItemDataAccess.GetLibraryItemList();
-        }
-
-
     }
 }

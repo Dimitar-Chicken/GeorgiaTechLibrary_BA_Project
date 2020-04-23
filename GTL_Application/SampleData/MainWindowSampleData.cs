@@ -13,7 +13,9 @@ namespace GTL_Application.SampleData
     {
         public string Title { get; set; }
         private ObservableCollection<LibraryItem> _libraryItems;
+        private ObservableCollection<LibraryItemBorrow> _libraryItemBorrows;
         private CollectionViewSource _libraryItemsCollection;
+        private CollectionViewSource _libraryItemBorrowsCollection;
 
         public MainWindowSampleData()
         {
@@ -28,17 +30,39 @@ namespace GTL_Application.SampleData
                 TypeName = "Book"
             };
             _libraryItems.Add(libraryItem1);
-
             _libraryItemsCollection = new CollectionViewSource
             {
                 Source = _libraryItems
             };
+
+            _libraryItemBorrows = new ObservableCollection<LibraryItemBorrow>();
+            LibraryItemBorrow libraryItemBorrow1 = new LibraryItemBorrow
+            {
+                PersonName = "John Doe",
+                ISBN = "9783161484100",
+                BorrowDate = new DateTime(),
+                ReturnDate = new DateTime()
+            };
+
+            _libraryItemBorrows.Add(libraryItemBorrow1);
+            _libraryItemBorrowsCollection = new CollectionViewSource
+            {
+                Source = _libraryItemBorrows
+            };
         }
-        public ICollectionView SourceCollection
+        public ICollectionView LibraryItemCollection
         {
             get
             {
                 return _libraryItemsCollection.View;
+            }
+        }
+
+        public ICollectionView LibraryItemBorrowsCollection
+        {
+            get
+            {
+                return _libraryItemBorrowsCollection.View;
             }
         }
     }
