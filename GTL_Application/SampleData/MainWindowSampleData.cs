@@ -39,6 +39,7 @@ namespace GTL_Application.SampleData
             LibraryItemBorrow libraryItemBorrow1 = new LibraryItemBorrow
             {
                 PersonName = "John Doe",
+                Title = "Test Title",
                 ISBN = "9783161484100",
                 BorrowDate = new DateTime(),
                 ReturnDate = new DateTime()
