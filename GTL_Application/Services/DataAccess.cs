@@ -24,10 +24,10 @@ namespace GTL_Application
             ObservableCollection<LibraryItem> libraryItems = new ObservableCollection<LibraryItem>();
             connection.Open();
 
-            string query = @"SELECT LibraryItems.LibraryItem.Title, LibraryItems.Author.AuthorName, LibraryItems.LibraryItem.SubjectArea, LibraryItems.LibraryItem.ItemDescription, LibraryItems.LibraryItemType.TypeName AS LibraryItemType " + 
+            string query = @"SELECT LibraryItems.LibraryItem.Title, CONCAT(LibraryItems.Author.FirstName, ' ',LibraryItems.Author.LastName) as AuthorName, LibraryItems.LibraryItem.SubjectArea, LibraryItems.LibraryItem.ItemDescription, LibraryItems.LibraryItem.LibraryItemType " +
                             "FROM LibraryItems.LibraryItem " +
-                            "INNER JOIN LibraryItems.Author ON LibraryItems.Author.AuthorID = LibraryItems.LibraryItem.AuthorID " +
-                            "INNER JOIN LibraryItems.LibraryItemType ON LibraryItems.LibraryItemType.TypeID = LibraryItems.LibraryItem.LibraryItemTypeID ";
+                            "INNER JOIN LibraryItems.BookAuthor ON LibraryItems.LibraryItem.LibraryItemID = LibraryItems.BookAuthor.LibraryItemID " +
+                            "INNER JOIN LibraryItems.Author ON LibraryItems.Author.AuthorID = LibraryItems.BookAuthor.AuthorID ";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
@@ -55,11 +55,10 @@ namespace GTL_Application
             ObservableCollection<LibraryItemBorrow> libraryItemBorrows = new ObservableCollection<LibraryItemBorrow>();
             connection.Open();
 
-            string query = @"SELECT LibraryItems.ISBN.ISBN, LibraryItems.LibraryItem.Title, CONCAT(People.Person.FirstName, ' ', People.Person.LastName) AS PersonName, BookBorrow.Borrows.BorrowDate, BookBorrow.Borrows.ReturnDate " +
-                            "FROM BookBorrow.Borrows " +
-                            "INNER JOIN People.Person ON BookBorrow.Borrows.PersonSSN = People.Person.SSN " +
-                            "INNER JOIN LibraryItems.ISBN ON BookBorrow.Borrows.ISBNID = LibraryItems.ISBN.ISBNID " +
-                            "INNER JOIN LibraryItems.LibraryItem ON LibraryItems.ISBN.LibraryItemID = LibraryItems.LibraryItem.LibraryItemID ";
+            string query = @"SELECT LibraryItems.BookCopy.ISBN, LibraryItems.LibraryItem.Title, CONCAT(People.Person.FirstName, ' ', People.Person.LastName) AS PersonName, LibraryItems.BookCopy.BorrowDate, LibraryItems.BookCopy.ReturnDate " +
+                            "FROM LibraryItems.BookCopy " +
+                            "INNER JOIN People.Person ON LibraryItems.BookCopy.BorrowerSSN = People.Person.SSN " +
+                            "INNER JOIN LibraryItems.LibraryItem ON LibraryItems.BookCopy.BookID = LibraryItems.LibraryItem.LibraryItemID ";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
