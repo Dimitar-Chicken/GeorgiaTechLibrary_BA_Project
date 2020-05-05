@@ -24,10 +24,7 @@ namespace GTL_Application
             ObservableCollection<LibraryItem> libraryItems = new ObservableCollection<LibraryItem>();
             connection.Open();
 
-            string query = @"SELECT LibraryItems.LibraryItem.Title, CONCAT(LibraryItems.Author.FirstName, ' ',LibraryItems.Author.LastName) as AuthorName, LibraryItems.LibraryItem.SubjectArea, LibraryItems.LibraryItem.ItemDescription, LibraryItems.LibraryItem.LibraryItemType " +
-                            "FROM LibraryItems.LibraryItem " +
-                            "INNER JOIN LibraryItems.BookAuthor ON LibraryItems.LibraryItem.LibraryItemID = LibraryItems.BookAuthor.LibraryItemID " +
-                            "INNER JOIN LibraryItems.Author ON LibraryItems.Author.AuthorID = LibraryItems.BookAuthor.AuthorID ";
+            string query = @"SELECT * FROM GetLibraryItems";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
@@ -55,10 +52,7 @@ namespace GTL_Application
             ObservableCollection<LibraryItemBorrow> libraryItemBorrows = new ObservableCollection<LibraryItemBorrow>();
             connection.Open();
 
-            string query = @"SELECT LibraryItems.BookCopy.ISBN, LibraryItems.LibraryItem.Title, CONCAT(People.Person.FirstName, ' ', People.Person.LastName) AS PersonName, LibraryItems.BookCopy.BorrowDate, LibraryItems.BookCopy.ReturnDate " +
-                            "FROM LibraryItems.BookCopy " +
-                            "INNER JOIN People.Person ON LibraryItems.BookCopy.BorrowerSSN = People.Person.SSN " +
-                            "INNER JOIN LibraryItems.LibraryItem ON LibraryItems.BookCopy.BookID = LibraryItems.LibraryItem.LibraryItemID ";
+            string query = @"SELECT * FROM GetBookBorrows";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
