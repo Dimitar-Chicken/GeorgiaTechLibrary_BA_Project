@@ -41,6 +41,7 @@ namespace GTL_Application.SampleData
                 PersonName = "John Doe",
                 Title = "Test Title",
                 ISBN = "9783161484100",
+                Status = "On Loan",
                 BorrowDate = new DateTime(),
                 ReturnDate = new DateTime()
             };

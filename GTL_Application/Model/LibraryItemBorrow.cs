@@ -9,6 +9,7 @@ namespace GTL_Application.Model
         public string PersonName { get; set; }
         public string Title { get; set; }
         public string ISBN { get; set; }
+        public string Status { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime ReturnDate { get; set; }
     }

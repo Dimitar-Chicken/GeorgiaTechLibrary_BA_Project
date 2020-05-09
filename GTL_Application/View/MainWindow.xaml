@@ -134,6 +134,9 @@
                         <DataGridTextColumn Header="ISBN"
                                             Binding="{Binding ISBN}"
                                             Width="*"/>
+                        <DataGridTextColumn Header="Status"
+                                            Binding="{Binding Status}"
+                                            Width="*"/>
                         <DataGridTextColumn Header="Borrow Date"
                                             Binding="{Binding BorrowDate}"
                                             Width="*"/>

@@ -63,6 +63,7 @@ namespace GTL_Application
                     PersonName = dataReader["PersonName"].ToString(),
                     Title = dataReader["Title"].ToString(),
                     ISBN = dataReader["ISBN"].ToString(),
+                    Status = dataReader["BookStatus"].ToString(),
                     //TODO: Add check for Parsing success.
                     BorrowDate = Convert.ToDateTime(dataReader["BorrowDate"]),
                     ReturnDate = Convert.ToDateTime(dataReader["ReturnDate"])
