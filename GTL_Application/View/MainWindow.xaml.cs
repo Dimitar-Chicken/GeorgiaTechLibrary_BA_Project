@@ -41,5 +41,12 @@ namespace GTL_Application
             BorrowedItemsTab.DataContext = borrowedItemsListViewModel;
             PeopleTab.DataContext = peopleListViewModel;
         }
+
+        private void EnableListViewScrolling(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrowViewer = (ScrollViewer)sender;
+            scrowViewer.ScrollToVerticalOffset(scrowViewer.VerticalOffset - e.Delta/6);
+            e.Handled = true;
+        }
     }
 }
