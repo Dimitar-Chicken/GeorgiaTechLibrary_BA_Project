@@ -19,18 +19,27 @@
                 <Button DockPanel.Dock="Top"
                         Content="Refresh"
                         Command="{Binding GetLibraryItemsListCommand}"/>
-                <DockPanel DockPanel.Dock="Top">
-                    <Label Content="Search:"
-                           DockPanel.Dock="Left"/>
-                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                <DockPanel DockPanel.Dock="Top"
+                           Margin="5">
+                    <!--<Label Content="Search:"
+                           DockPanel.Dock="Left"/>-->
+                    <Button DockPanel.Dock="Left"
+                            Content="Filter"
+                            Padding="5,2,5,2"
+                            IsDefault="{Binding ElementName=LibraryItemSearchTextBox, Path=IsKeyboardFocused}"
+                            Command="{Binding Path=GetFilteredLibraryItemsListCommand}"/>
+                    <TextBox x:Name="LibraryItemSearchTextBox" 
+                             DockPanel.Dock="Top"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                              HorizontalAlignment="Stretch"
-                             VerticalAlignment="Center"
+                             VerticalAlignment="Stretch"
                              TextWrapping="Wrap"
-                             DockPanel.Dock="Top"/>
+                             VerticalContentAlignment="Center"/>
                 </DockPanel>
-                <ScrollViewer DockPanel.Dock="Top">
-                    <ListView ItemsSource="{Binding LibraryItemCollection}"
-                          Background="Gray">
+                <ScrollViewer DockPanel.Dock="Top"
+                              PreviewMouseWheel="EnableListViewScrolling">
+                    <ListView ItemsSource="{Binding FilteredLibraryItems}"
+                              Background="Gray">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="Background" Value="White"/>
@@ -110,16 +119,25 @@
                         Content="Refresh"
                         HorizontalAlignment="Stretch"
                         Command="{Binding Path=GetLibraryItemBorrowsListCommand}"/>
-                <DockPanel DockPanel.Dock="Top">
-                    <Label DockPanel.Dock="Left"
-                       Content="Search:"/>
-                    <TextBox DockPanel.Dock="Top"
-                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                         VerticalAlignment="Center"
-                         TextWrapping="Wrap"/>
+                <DockPanel DockPanel.Dock="Top"
+                           Margin="5">
+                    <!--<Label DockPanel.Dock="Left"
+                       Content="Search:"/>-->
+                    <Button DockPanel.Dock="Left"
+                            Content="Filter"
+                            Padding="5,2,5,2"
+                            IsDefault="{Binding ElementName=BorrowedItemsSearchTextBox, Path=IsKeyboardFocused}"
+                            Command="{Binding Path=GetFilteredLibraryItemBorrowsListCommand}"/>
+                    <TextBox x:Name="BorrowedItemsSearchTextBox"
+                             DockPanel.Dock="Top"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center"
+                             TextWrapping="Wrap"/>
                 </DockPanel>
                 <DataGrid DockPanel.Dock="Top"
-                          ItemsSource="{Binding LibraryItemBorrowsCollection}"
+                          ItemsSource="{Binding FilteredLibraryItemBorrows}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
                           CanUserReorderColumns="False"
