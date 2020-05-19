@@ -47,28 +47,28 @@ namespace GTL_Test
         }
         #endregion
 
-        readonly DataAccess libraryItemDataAccess;
+        readonly DataAccess mockDataAccess;
         readonly MainWindowViewModel mainWindowViewModel;
         readonly LibraryItemsListViewModel libraryItemsListViewModel;
         public ViewModelTests()
         {
-            libraryItemDataAccess = new DataAccess();
+            mockDataAccess = new DataAccess();
             mainWindowViewModel = new MainWindowViewModel();
-            libraryItemsListViewModel = new LibraryItemsListViewModel();
+            libraryItemsListViewModel = new LibraryItemsListViewModel(mockDataAccess);
         }
 
         [Fact]
         public void GetLibraryItemsListCommandTest_Passes()
         {
             libraryItemsListViewModel.GetLibraryItemsListCommand.Execute(null);
-            Assert.NotEmpty(libraryItemsListViewModel.LibraryItems);
+            Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
         }
 
         [Fact]
         public void GetLibraryItemsListTest_Passes()
         {
             libraryItemsListViewModel.GetLibraryItemsList();
-            Assert.NotEmpty(libraryItemsListViewModel.LibraryItems);
+            Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
         }
     }
 }
