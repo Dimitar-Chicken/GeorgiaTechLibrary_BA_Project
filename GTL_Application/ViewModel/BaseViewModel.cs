@@ -1,9 +1,7 @@
-﻿using GTL_Application.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace GTL_Application.ViewModel
 {

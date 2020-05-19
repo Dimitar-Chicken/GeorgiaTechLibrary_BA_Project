@@ -1,13 +1,5 @@
-﻿using GTL_Application.Model;
-using GTL_Application.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Reflection;
-using System.Text;
+﻿using System.Reflection;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace GTL_Application.ViewModel
 {
