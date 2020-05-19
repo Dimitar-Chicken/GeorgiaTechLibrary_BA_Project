@@ -1,11 +1,8 @@
-﻿using GTL_Application.Model;
+﻿using GTL_Application.Interfaces;
+using GTL_Application.Model;
 using GTL_Application.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Text;
-using System.Windows.Data;
+using System.Reflection;
 using System.Windows.Input;
 
 namespace GTL_Application.ViewModel
@@ -14,9 +11,10 @@ namespace GTL_Application.ViewModel
     {
         private string _searchText;
         protected readonly DataAccess _dataAccess;
-        private ObservableCollection<LibraryItemBorrow> _libraryItemBorrows;
-        private CollectionViewSource _libraryItemBorrowsCollection;
+        private ObservableCollection<ILibraryItemBorrow> _libraryItemBorrows;
+        private ObservableCollection<ILibraryItemBorrow> _filtered;
         private ICommand _getLibraryItemBorrowsListCommand;
+        private ICommand _getFilteredLibraryItemBorrowsListCommand;
         public BorrowedItemsListViewModel()
         {
             _dataAccess = new DataAccess();
@@ -31,13 +29,9 @@ namespace GTL_Application.ViewModel
 
         public void InitializeAll()
         {
-            _libraryItemBorrows = new ObservableCollection<LibraryItemBorrow>();
+            _libraryItemBorrows = new ObservableCollection<ILibraryItemBorrow>();
+            _filtered = new ObservableCollection<ILibraryItemBorrow>();
             GetLibraryItemBorrowsList();
-            _libraryItemBorrowsCollection = new CollectionViewSource
-            {
-                Source = LibraryItemBorrows
-            };
-            _libraryItemBorrowsCollection.Filter += (sender, FilterEventArgs) => { CollectionFilter(sender, FilterEventArgs, SearchText); };
         }
 
         public string SearchText
@@ -49,22 +43,13 @@ namespace GTL_Application.ViewModel
             set
             {
                 _searchText = value;
-                _libraryItemBorrowsCollection.View.Refresh();
             }
         }
 
-        public ICollectionView LibraryItemBorrowsCollection
+        public ObservableCollection<ILibraryItemBorrow> FilteredLibraryItemBorrows
         {
-            get
-            {
-                return _libraryItemBorrowsCollection.View;
-            }
-        }
-
-        public ObservableCollection<LibraryItemBorrow> LibraryItemBorrows
-        {
-            get { return _libraryItemBorrows; }
-            set { SetProperty(ref _libraryItemBorrows, value); }
+            get { return _filtered; }
+            set { SetProperty(ref _filtered, value); }
         }
 
         public ICommand GetLibraryItemBorrowsListCommand
@@ -75,9 +60,56 @@ namespace GTL_Application.ViewModel
             }
         }
 
+        public ICommand GetFilteredLibraryItemBorrowsListCommand
+        {
+            get
+            {
+                return _getFilteredLibraryItemBorrowsListCommand ?? (_getFilteredLibraryItemBorrowsListCommand = new CommandHandler(() => GetFilteredLibraryItemsList(), () => true));
+            }
+        }
+
         public void GetLibraryItemBorrowsList()
         {
-            LibraryItemBorrows = _dataAccess.GetLibraryItemBorrowsList();
+            _libraryItemBorrows = _dataAccess.GetLibraryItemBorrowsList();
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                FilteredLibraryItemBorrows = _dataAccess.GetLibraryItemBorrowsList();
+            }
+        }
+
+        public void GetFilteredLibraryItemsList()
+        {
+            FilteredLibraryItemBorrows = FilterList();
+        }
+
+        public ObservableCollection<ILibraryItemBorrow> FilterList()
+        {
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                return _libraryItemBorrows;
+            }
+            else
+            {
+                _filtered.Clear();
+                foreach (LibraryItemBorrow item in _libraryItemBorrows)
+                {
+                    // Gather a list of all the properties of the LibraryItem object instance.
+                    PropertyInfo[] props = item.GetType().GetProperties();
+                    // Iterate over the individual properties and retrieve the values using the Get methods.
+                    foreach (var p in props)
+                    {
+                        var val = p.GetValue(item);
+                        if (val == null)
+                            return _libraryItemBorrows;
+
+                        // If the property contains the SearchText string, set the FilterEventArgs Accepted flag to true in order to display it in the Collection.
+                        if (val.ToString().ToUpper().Contains(SearchText.ToUpper()))
+                            _filtered.Add(item);
+                    }
+                }
+
+                return _filtered;
+            }
         }
     }
 }
