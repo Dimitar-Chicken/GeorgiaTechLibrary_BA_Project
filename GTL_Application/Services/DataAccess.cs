@@ -1,4 +1,5 @@
-﻿using GTL_Application.Model;
+﻿using GTL_Application.Interfaces;
+using GTL_Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace GTL_Application
 {
-    public class DataAccess
+    public class DataAccess : IDataAccess
     {
         private string connectionString;
 
@@ -14,17 +15,17 @@ namespace GTL_Application
         {
             connectionString = @"Server=ANOOBIS-DESKTOP\SQL2019;" +
                                 "Database=GeorgiaTechLibrary_BA_Project_DB;" +
-                                "User Id=sa;" +
+                                "User Id=GTLClient;" +
                                 "Password=1234;";
         }
 
-        public ObservableCollection<LibraryItem> GetLibraryItemList()
+        public ObservableCollection<ILibraryItem> GetLibraryItemList()
         {
             using SqlConnection connection = new SqlConnection(connectionString);
-            ObservableCollection<LibraryItem> libraryItems = new ObservableCollection<LibraryItem>();
+            ObservableCollection<ILibraryItem> libraryItems = new ObservableCollection<ILibraryItem>();
             connection.Open();
 
-            string query = @"SELECT * FROM GetLibraryItems";
+            string query = @"SELECT * FROM [Views].[GetLibraryItems]";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
@@ -46,13 +47,13 @@ namespace GTL_Application
             return libraryItems;
         }
 
-        public ObservableCollection<LibraryItemBorrow> GetLibraryItemBorrowsList()
+        public ObservableCollection<ILibraryItemBorrow> GetLibraryItemBorrowsList()
         {
             using SqlConnection connection = new SqlConnection(connectionString);
-            ObservableCollection<LibraryItemBorrow> libraryItemBorrows = new ObservableCollection<LibraryItemBorrow>();
+            ObservableCollection<ILibraryItemBorrow> libraryItemBorrows = new ObservableCollection<ILibraryItemBorrow>();
             connection.Open();
 
-            string query = @"SELECT * FROM GetBookBorrows";
+            string query = @"SELECT * FROM [Views].[GetBookBorrows]";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 

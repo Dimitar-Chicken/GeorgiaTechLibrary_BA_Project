@@ -1,4 +1,5 @@
-﻿using GTL_Application.Model;
+﻿using GTL_Application.Interfaces;
+using GTL_Application.Model;
 using GTL_Application.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,13 @@ namespace GTL_Application.SampleData
     class MainWindowSampleData : BaseViewModel
     {
         public string Title { get; set; }
-        private ObservableCollection<LibraryItem> _libraryItems;
-        private ObservableCollection<LibraryItemBorrow> _libraryItemBorrows;
-        private CollectionViewSource _libraryItemsCollection;
-        private CollectionViewSource _libraryItemBorrowsCollection;
+        private ObservableCollection<ILibraryItem> _libraryItems;
+        private ObservableCollection<ILibraryItemBorrow> _libraryItemBorrows;
 
         public MainWindowSampleData()
         {
             Title = "Sample";
-            _libraryItems = new ObservableCollection<LibraryItem>();
+            _libraryItems = new ObservableCollection<ILibraryItem>();
             LibraryItem libraryItem1 = new LibraryItem
             {
                 Title = "Sample Title",
@@ -30,12 +29,8 @@ namespace GTL_Application.SampleData
                 TypeName = "Book"
             };
             _libraryItems.Add(libraryItem1);
-            _libraryItemsCollection = new CollectionViewSource
-            {
-                Source = _libraryItems
-            };
 
-            _libraryItemBorrows = new ObservableCollection<LibraryItemBorrow>();
+            _libraryItemBorrows = new ObservableCollection<ILibraryItemBorrow>();
             LibraryItemBorrow libraryItemBorrow1 = new LibraryItemBorrow
             {
                 PersonName = "John Doe",
@@ -47,25 +42,17 @@ namespace GTL_Application.SampleData
             };
 
             _libraryItemBorrows.Add(libraryItemBorrow1);
-            _libraryItemBorrowsCollection = new CollectionViewSource
-            {
-                Source = _libraryItemBorrows
-            };
         }
-        public ICollectionView LibraryItemCollection
+        public ObservableCollection<ILibraryItem> FilteredLibraryItems
         {
-            get
-            {
-                return _libraryItemsCollection.View;
-            }
+            get { return _libraryItems; }
+            set { SetProperty(ref _libraryItems, value); }
         }
 
-        public ICollectionView LibraryItemBorrowsCollection
+        public ObservableCollection<ILibraryItemBorrow> FilteredLibraryItemBorrows
         {
-            get
-            {
-                return _libraryItemBorrowsCollection.View;
-            }
+            get { return _libraryItemBorrows; }
+            set { SetProperty(ref _libraryItemBorrows, value); }
         }
     }
 }
