@@ -7,23 +7,18 @@ using System.Windows.Input;
 
 namespace GTL_Application.ViewModel
 {
-    public class BorrowedItemsListViewModel : MainWindowViewModel
+    public class BorrowedItemsListViewModel : MainWindowViewModel, IBorrowedItemsListViewModel
     {
         private string _searchText;
-        protected readonly DataAccess _dataAccess;
+        protected readonly IDataAccess _dataAccess;
         private ObservableCollection<ILibraryItemBorrow> _libraryItemBorrows;
         private ObservableCollection<ILibraryItemBorrow> _filtered;
         private ICommand _getLibraryItemBorrowsListCommand;
         private ICommand _getFilteredLibraryItemBorrowsListCommand;
-        public BorrowedItemsListViewModel()
-        {
-            _dataAccess = new DataAccess();
-            InitializeAll();
-        }
 
-        public BorrowedItemsListViewModel(DataAccess mockDataAccess)
+        public BorrowedItemsListViewModel(IDataAccess dataAccess)
         {
-            _dataAccess = mockDataAccess;
+            _dataAccess = dataAccess;
             InitializeAll();
         }
 
@@ -64,7 +59,7 @@ namespace GTL_Application.ViewModel
         {
             get
             {
-                return _getFilteredLibraryItemBorrowsListCommand ?? (_getFilteredLibraryItemBorrowsListCommand = new CommandHandler(() => GetFilteredLibraryItemsList(), () => true));
+                return _getFilteredLibraryItemBorrowsListCommand ?? (_getFilteredLibraryItemBorrowsListCommand = new CommandHandler(() => GetFilteredLibraryItemBorrowsList(), () => true));
             }
         }
 
@@ -77,7 +72,7 @@ namespace GTL_Application.ViewModel
             }
         }
 
-        public void GetFilteredLibraryItemsList()
+        public void GetFilteredLibraryItemBorrowsList()
         {
             FilteredLibraryItemBorrows = FilterList();
         }
