@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace GTL_Application.ViewModel
 {
-    public class LibraryItemsListViewModel : MainWindowViewModel
+    public class LibraryItemsListViewModel : MainWindowViewModel, ILibraryItemsListViewModel
     {
         private string _searchText;
         protected readonly IDataAccess _dataAccess;
@@ -18,15 +18,9 @@ namespace GTL_Application.ViewModel
         private ICommand _getLibraryItemsListCommand;
         private ICommand _getFilteredLibraryItemsListCommand;
 
-        public LibraryItemsListViewModel()
+        public LibraryItemsListViewModel(IDataAccess dataAccess)
         {
-            _dataAccess = new DataAccess();
-            InitializeAll();
-        }
-
-        public LibraryItemsListViewModel(IDataAccess mockDataAccess)
-        {
-            _dataAccess = mockDataAccess;
+            _dataAccess = dataAccess;
             InitializeAll();
         }
 
