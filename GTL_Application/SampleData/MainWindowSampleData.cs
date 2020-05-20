@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Data;
 
 namespace GTL_Application.SampleData
 {
-    class MainWindowSampleData : BaseViewModel
+    class MainWindowSampleData : MainWindowViewModel
     {
-        public string Title { get; set; }
         private ObservableCollection<ILibraryItem> _libraryItems;
         private ObservableCollection<ILibraryItemBorrow> _libraryItemBorrows;
 
@@ -43,6 +43,7 @@ namespace GTL_Application.SampleData
 
             _libraryItemBorrows.Add(libraryItemBorrow1);
         }
+
         public ObservableCollection<ILibraryItem> FilteredLibraryItems
         {
             get { return _libraryItems; }
