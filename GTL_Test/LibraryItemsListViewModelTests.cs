@@ -1,15 +1,19 @@
-using GTL_Application;
+﻿using GTL_Application;
+using GTL_Application.Interfaces;
 using GTL_Application.Model;
 using GTL_Application.ViewModel;
+using GTL_Test.Mocks;
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using Xunit;
 
 namespace GTL_Test
 {
-
-    public class ViewModelTests : IDisposable
+    [ExcludeFromCodeCoverage]
+    public class LibraryItemsListViewModelTests : IDisposable
     {
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -31,7 +35,7 @@ namespace GTL_Test
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~ViewModelTests()
+        // ~LibraryItemsListViewModelTests()
         // {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
@@ -47,28 +51,54 @@ namespace GTL_Test
         }
         #endregion
 
-        readonly DataAccess mockDataAccess;
-        readonly MainWindowViewModel mainWindowViewModel;
+        readonly MockDataAccess mockDataAccess;
         readonly LibraryItemsListViewModel libraryItemsListViewModel;
-        public ViewModelTests()
+        public LibraryItemsListViewModelTests()
         {
-            mockDataAccess = new DataAccess();
-            mainWindowViewModel = new MainWindowViewModel();
+            mockDataAccess = new MockDataAccess();
             libraryItemsListViewModel = new LibraryItemsListViewModel(mockDataAccess);
         }
 
         [Fact]
-        public void GetLibraryItemsListCommandTest_Passes()
+        public void TC001_LibraryItemsListViewModel_GetLibraryItemsListCommand_Passes()
         {
             libraryItemsListViewModel.GetLibraryItemsListCommand.Execute(null);
             Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
         }
 
         [Fact]
-        public void GetLibraryItemsListTest_Passes()
+        public void TC001_LibraryItemsListViewModel_GetFilteredLibraryItemsListCommand_Passes()
         {
-            libraryItemsListViewModel.GetLibraryItemsList();
+            libraryItemsListViewModel.GetFilteredLibraryItemsListCommand.Execute(null);
             Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
+        }
+
+        [Theory]
+        [InlineData("Tanek")]
+        [InlineData("John")]
+        public void TC003_LibraryItemsListViewModel_FilterList_Author_Passes(string searchText)
+        {
+            ObservableCollection<ILibraryItem> result;
+
+            libraryItemsListViewModel.SearchText = searchText;
+
+            result = libraryItemsListViewModel.FilterList();
+
+            Assert.Contains(searchText, result[0].Author);
+        }
+
+        [Theory]
+        [InlineData("Lies")]
+        [InlineData("Truths")]
+        public void TC003_LibraryItemsListViewModel_FilterList_Title_Passes(string searchText)
+        {
+            ObservableCollection<ILibraryItem> result;
+
+            libraryItemsListViewModel.SearchText = searchText;
+
+            result = libraryItemsListViewModel.FilterList();
+
+            Assert.Contains(searchText, result[0].Title);
         }
     }
 }
