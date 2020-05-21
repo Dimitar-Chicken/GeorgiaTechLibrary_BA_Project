@@ -5,12 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Data;
 
 namespace GTL_Application.SampleData
 {
+    [ExcludeFromCodeCoverage]
     class MainWindowSampleData : MainWindowViewModel
     {
         private ObservableCollection<ILibraryItem> _libraryItems;
@@ -28,6 +30,7 @@ namespace GTL_Application.SampleData
                 ItemDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                 TypeName = "Book"
             };
+
             _libraryItems.Add(libraryItem1);
 
             _libraryItemBorrows = new ObservableCollection<ILibraryItemBorrow>();
