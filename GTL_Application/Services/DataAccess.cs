@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 
-namespace GTL_Application
+namespace GTL_Application.Services
 {
     public class DataAccess : IDataAccess
     {
