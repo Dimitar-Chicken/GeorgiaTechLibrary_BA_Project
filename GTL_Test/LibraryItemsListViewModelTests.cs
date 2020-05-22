@@ -1,13 +1,8 @@
-﻿using GTL_Application;
-using GTL_Application.Interfaces;
-using GTL_Application.Model;
+﻿using GTL_Application.Interfaces;
 using GTL_Application.ViewModel;
 using GTL_Test.Mocks;
-using Microsoft.Win32.SafeHandles;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
 using Xunit;
 
 namespace GTL_Test
@@ -40,21 +35,12 @@ namespace GTL_Test
         [Theory]
         [InlineData("Tanek")]
         [InlineData("John")]
-        public void TC003_LibraryItemsListViewModel_FilterList_Author_Passes(string searchText)
-        {
-            ObservableCollection<ILibraryItem> result;
-
-            libraryItemsListViewModel.SearchText = searchText;
-
-            result = libraryItemsListViewModel.FilterList();
-
-            Assert.Contains(searchText, result[0].Author);
-        }
-
-        [Theory]
         [InlineData("Lies")]
         [InlineData("Truths")]
-        public void TC003_LibraryItemsListViewModel_FilterList_Title_Passes(string searchText)
+        [InlineData("Book")]
+        [InlineData("dummy text")]
+        [InlineData("Subject")]
+        public void TC003_LibraryItemsListViewModel_FilterList_Passes(string searchText)
         {
             ObservableCollection<ILibraryItem> result;
 
@@ -62,7 +48,7 @@ namespace GTL_Test
 
             result = libraryItemsListViewModel.FilterList();
 
-            Assert.Contains(searchText, result[0].Title);
+            Assert.Contains(result[0].GetType().GetProperties(), p => p.GetValue(result[0]).ToString().Contains(searchText));
         }
     }
 }
