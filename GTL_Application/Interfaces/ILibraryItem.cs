@@ -1,9 +1,10 @@
-﻿using GTL_Application.Interfaces;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace GTL_Application.Model
+namespace GTL_Application.Interfaces
 {
-    public class LibraryItem : ILibraryItem
+    public interface ILibraryItem
     {
         public string Title { get; set; }
         public string Author { get; set; }

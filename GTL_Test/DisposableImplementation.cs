@@ -1,15 +1,12 @@
-using GTL_Application;
-using GTL_Application.Model;
-using GTL_Application.ViewModel;
-using Microsoft.Win32.SafeHandles;
-using System;
-using System.Runtime.InteropServices;
-using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace GTL_Test
 {
-
-    public class ViewModelTests : IDisposable
+    [ExcludeFromCodeCoverage]
+    public class DisposableImplementation : IDisposable
     {
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
@@ -31,7 +28,7 @@ namespace GTL_Test
         }
 
         // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~ViewModelTests()
+        // ~LibraryItemsListViewModelTests()
         // {
         //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
         //   Dispose(false);
@@ -46,29 +43,5 @@ namespace GTL_Test
             // GC.SuppressFinalize(this);
         }
         #endregion
-
-        readonly DataAccess libraryItemDataAccess;
-        readonly MainWindowViewModel mainWindowViewModel;
-        readonly LibraryItemsListViewModel libraryItemsListViewModel;
-        public ViewModelTests()
-        {
-            libraryItemDataAccess = new DataAccess();
-            mainWindowViewModel = new MainWindowViewModel();
-            libraryItemsListViewModel = new LibraryItemsListViewModel();
-        }
-
-        [Fact]
-        public void GetLibraryItemsListCommandTest_Passes()
-        {
-            libraryItemsListViewModel.GetLibraryItemsListCommand.Execute(null);
-            Assert.NotEmpty(libraryItemsListViewModel.LibraryItems);
-        }
-
-        [Fact]
-        public void GetLibraryItemsListTest_Passes()
-        {
-            libraryItemsListViewModel.GetLibraryItemsList();
-            Assert.NotEmpty(libraryItemsListViewModel.LibraryItems);
-        }
     }
 }

@@ -1,17 +1,14 @@
-﻿using GTL_Application.Model;
-using GTL_Application.Services;
+﻿using GTL_Application.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace GTL_Application.ViewModel
 {
-    public class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : IMainWindowViewModel, INotifyPropertyChanged
     {
         public string Title { get; set; }
         public MainWindowViewModel()
@@ -19,36 +16,31 @@ namespace GTL_Application.ViewModel
             Title = "Test";
         }
 
-        public void CollectionFilter(object sender, FilterEventArgs e, string SearchText)
+        #region Property Processing
+        protected bool SetProperty<T>(ref T backingStore, T value,
+           [CallerMemberName]string propertyName = "",
+           Action onChanged = null)
         {
-            if (string.IsNullOrEmpty(SearchText))
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var changed = PropertyChanged;
+            if (changed == null)
             {
-                e.Accepted = true;
                 return;
             }
 
-            object objectToFilter = e.Item as object;
-
-            // Gather a list of all the properties of the LibraryItem object instance.
-            PropertyInfo[] props = objectToFilter.GetType().GetProperties();
-            // Iterate over the individual properties and retrieve the values using the Get methods.
-            foreach (var p in props)
-            {
-                var val = p.GetValue(objectToFilter);
-                if (val == null)
-                    return;
-
-                // If the property contains the SearchText string, set the FilterEventArgs Accepted flag to true in order to display it in the Collection.
-                if (val.ToString().ToUpper().Contains(SearchText.ToUpper()))
-                {
-                    e.Accepted = true;
-                    return;
-                }
-                else
-                {
-                    e.Accepted = false;
-                }
-            }
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion Property
     }
 }

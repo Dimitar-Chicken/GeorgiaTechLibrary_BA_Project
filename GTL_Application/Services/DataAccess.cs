@@ -1,12 +1,13 @@
-﻿using GTL_Application.Model;
+﻿using GTL_Application.Interfaces;
+using GTL_Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 
-namespace GTL_Application
+namespace GTL_Application.Services
 {
-    public class DataAccess
+    public class DataAccess : IDataAccess
     {
         private string connectionString;
 
@@ -14,19 +15,17 @@ namespace GTL_Application
         {
             connectionString = @"Server=ANOOBIS-DESKTOP\SQL2019;" +
                                 "Database=GeorgiaTechLibrary_BA_Project_DB;" +
-                                "User Id=sa;" +
+                                "User Id=GTLClient;" +
                                 "Password=1234;";
         }
 
-        public ObservableCollection<LibraryItem> GetLibraryItemList()
+        public ObservableCollection<ILibraryItem> GetLibraryItemList()
         {
             using SqlConnection connection = new SqlConnection(connectionString);
-            ObservableCollection<LibraryItem> libraryItems = new ObservableCollection<LibraryItem>();
+            ObservableCollection<ILibraryItem> libraryItems = new ObservableCollection<ILibraryItem>();
             connection.Open();
 
-            string query = @"SELECT LibraryItems.LibraryItem.Title, LibraryItems.LibraryItem.Author, LibraryItems.LibraryItem.SubjectArea, LibraryItems.LibraryItem.ItemDescription, LibraryItems.LibraryItemType.TypeName AS LibraryItemType " + 
-                            "FROM LibraryItems.LibraryItem " +
-                            "INNER JOIN LibraryItems.LibraryItemType ON LibraryItems.LibraryItemType.TypeID = LibraryItems.LibraryItem.LibraryItemTypeID ";
+            string query = @"SELECT * FROM [Views].[GetLibraryItems]";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
@@ -35,7 +34,7 @@ namespace GTL_Application
                 LibraryItem libraryItem = new LibraryItem
                 {
                     Title = dataReader["Title"].ToString(),
-                    Author = dataReader["Author"].ToString(),
+                    Author = dataReader["AuthorName"].ToString(),
                     SubjectArea = dataReader["SubjectArea"].ToString(),
                     ItemDescription = dataReader["ItemDescription"].ToString(),
                     TypeName = dataReader["LibraryItemType"].ToString()
@@ -48,16 +47,13 @@ namespace GTL_Application
             return libraryItems;
         }
 
-        public ObservableCollection<LibraryItemBorrow> GetLibraryItemBorrowsList()
+        public ObservableCollection<ILibraryItemBorrow> GetLibraryItemBorrowsList()
         {
             using SqlConnection connection = new SqlConnection(connectionString);
-            ObservableCollection<LibraryItemBorrow> libraryItemBorrows = new ObservableCollection<LibraryItemBorrow>();
+            ObservableCollection<ILibraryItemBorrow> libraryItemBorrows = new ObservableCollection<ILibraryItemBorrow>();
             connection.Open();
 
-            string query = @"SELECT LibraryItems.ISBN.ISBN, CONCAT(People.Person.FirstName, ' ', People.Person.LastName) AS PersonName, BookBorrow.Borrows.BorrowDate, BookBorrow.Borrows.ReturnDate " +
-                            "FROM BookBorrow.Borrows " +
-                            "INNER JOIN People.Person ON BookBorrow.Borrows.PersonSSN = People.Person.SSN " +
-                            "INNER JOIN LibraryItems.ISBN ON BookBorrow.Borrows.ISBNID = LibraryItems.ISBN.ISBNID";
+            string query = @"SELECT * FROM [Views].[GetBookBorrows]";
             SqlCommand command = new SqlCommand(query, connection);
             SqlDataReader dataReader = command.ExecuteReader();
 
@@ -66,7 +62,9 @@ namespace GTL_Application
                 LibraryItemBorrow libraryItemBorrow = new LibraryItemBorrow
                 {
                     PersonName = dataReader["PersonName"].ToString(),
+                    Title = dataReader["Title"].ToString(),
                     ISBN = dataReader["ISBN"].ToString(),
+                    Status = dataReader["BookStatus"].ToString(),
                     //TODO: Add check for Parsing success.
                     BorrowDate = Convert.ToDateTime(dataReader["BorrowDate"]),
                     ReturnDate = Convert.ToDateTime(dataReader["ReturnDate"])

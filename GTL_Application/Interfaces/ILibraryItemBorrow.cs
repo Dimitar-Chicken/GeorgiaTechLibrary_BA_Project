@@ -1,11 +1,10 @@
-﻿using GTL_Application.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GTL_Application.Model
+namespace GTL_Application.Interfaces
 {
-    public class LibraryItemBorrow : ILibraryItemBorrow
+    public interface ILibraryItemBorrow
     {
         public string PersonName { get; set; }
         public string Title { get; set; }
