@@ -1,10 +1,8 @@
 ﻿using GTL_Application.Interfaces;
 using GTL_Application.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace GTL_Test.Mocks
 {
@@ -32,7 +30,7 @@ namespace GTL_Test.Mocks
                 PersonName = "Larry Streisand",
                 Title = "Good Title",
                 ISBN = "9783221484100",
-                Status = "On Loan",
+                Status = "Overdue",
                 BorrowDate = new DateTime(),
                 ReturnDate = new DateTime()
             };
