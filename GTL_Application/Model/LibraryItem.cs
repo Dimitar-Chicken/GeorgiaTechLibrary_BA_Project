@@ -10,10 +10,5 @@ namespace GTL_Application.Model
         public string SubjectArea { get; set; }
         public string ItemDescription { get; set; }
         public string TypeName { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format("{0} by {1}", Title, Authors);
-        }
     }
 }
