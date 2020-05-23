@@ -34,7 +34,7 @@ namespace GTL_Application.Services
                 LibraryItem libraryItem = new LibraryItem
                 {
                     Title = dataReader["Title"].ToString(),
-                    Author = dataReader["AuthorName"].ToString(),
+                    Authors = dataReader["AuthorsNames"].ToString(),
                     SubjectArea = dataReader["SubjectArea"].ToString(),
                     ItemDescription = dataReader["ItemDescription"].ToString(),
                     TypeName = dataReader["LibraryItemType"].ToString()
