@@ -1,6 +1,8 @@
-﻿using GTL_Application.Interfaces;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GTL_Application.Interfaces;
 using GTL_Application.Model;
 using GTL_Application.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows.Input;
@@ -10,11 +12,12 @@ namespace GTL_Application.ViewModel
     public class BorrowedItemsListViewModel : MainWindowViewModel, IBorrowedItemsListViewModel
     {
         private string _searchText;
-        protected readonly IDataAccess _dataAccess;
+        private readonly IDataAccess _dataAccess;
         private ObservableCollection<ILibraryItemBorrow> _libraryItemBorrows;
         private ObservableCollection<ILibraryItemBorrow> _filtered;
         private ICommand _getLibraryItemBorrowsListCommand;
         private ICommand _getFilteredLibraryItemBorrowsListCommand;
+        private ICommand _openNewEntryWindowCommand;
 
         public BorrowedItemsListViewModel(IDataAccess dataAccess)
         {
@@ -63,6 +66,14 @@ namespace GTL_Application.ViewModel
             }
         }
 
+        public ICommand OpenNewEntryWindowCommand
+        {
+            get
+            {
+                return _openNewEntryWindowCommand ?? (_openNewEntryWindowCommand = new CommandHandler(() => OpenNewEntryWindow(), () => true));
+            }
+        }
+
         public void GetLibraryItemBorrowsList()
         {
             _libraryItemBorrows = _dataAccess.GetLibraryItemBorrowsList();
@@ -75,6 +86,13 @@ namespace GTL_Application.ViewModel
         public void GetFilteredLibraryItemBorrowsList()
         {
             FilteredLibraryItemBorrows = FilterList();
+        }
+
+        public void OpenNewEntryWindow()
+        {
+            NewBorrowedItemEntryViewModel newBorrowedItemEntryViewModel = new NewBorrowedItemEntryViewModel(_dataAccess);
+            ViewModelCarrier<INewBorrowedItemEntryViewModel> viewModelCarrier = new ViewModelCarrier<INewBorrowedItemEntryViewModel>(newBorrowedItemEntryViewModel);
+            Messenger.Default.Send(viewModelCarrier);
         }
 
         public ObservableCollection<ILibraryItemBorrow> FilterList()
