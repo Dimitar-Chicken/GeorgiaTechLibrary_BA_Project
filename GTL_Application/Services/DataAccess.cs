@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.Security;
 
 namespace GTL_Application.Services
 {
@@ -76,6 +77,52 @@ namespace GTL_Application.Services
 
 
             return libraryItemBorrows;
+        }
+
+        public ObservableCollection<IBorrowableBookCopy> GetBorrowableBookCopiesList()
+        {
+            using SqlConnection connection = new SqlConnection(connectionString);
+            ObservableCollection<IBorrowableBookCopy> borrowableBookCopies = new ObservableCollection<IBorrowableBookCopy>();
+            connection.Open();
+
+            string query = @"SELECT * FROM [Views].[GetBorrowableBookCopies]";
+            SqlCommand command = new SqlCommand(query, connection);
+            SqlDataReader dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                BorrowableBookCopy borrowableBookCopy = new BorrowableBookCopy
+                {
+                    ID = convertToSecureString(dataReader["BookCopyID"].ToString()),
+                    Title = dataReader["Title"].ToString(),
+                    Authors = dataReader["AuthorsNames"].ToString()
+                };
+
+                borrowableBookCopies.Add(borrowableBookCopy);
+            }
+            connection.Close();
+
+
+            return borrowableBookCopies;
+        }
+
+        /// <summary>
+        /// Method used to convert string from query result to a SecureString type.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>SecureString result</returns>
+        public SecureString convertToSecureString(string input)
+        {
+            if (input == null)
+                return null;
+
+            SecureString result = new SecureString();
+            foreach (char c in input)
+            {
+                result.AppendChar(c);
+            }
+
+            return result;
         }
     }
 }
