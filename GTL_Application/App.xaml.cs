@@ -1,6 +1,8 @@
 ﻿using GTL_Application.Interfaces;
 using GTL_Application.Services;
+using GTL_Application.View;
 using GTL_Application.ViewModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 
 namespace GTL_Application
@@ -8,6 +10,7 @@ namespace GTL_Application
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial class App : Application
     {
         IDataAccess dataAccess;
