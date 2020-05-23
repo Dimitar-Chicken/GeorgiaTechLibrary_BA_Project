@@ -109,8 +109,8 @@
                                             Content="Description"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Right"
-                                            Tag="{Binding ItemDescription}"
-                                            Click="Description_Click"/>
+                                            Command="{Binding ElementName=LibraryItemListTab, Path=DataContext.OpenDescriptionWindowCommand}"
+                                            CommandParameter="{Binding ItemDescription}"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

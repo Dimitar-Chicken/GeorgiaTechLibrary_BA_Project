@@ -27,6 +27,12 @@ namespace GTL_Application.View
                 NewBorrowedItemEntryWindow newBorrowedItemEntryWindow = new NewBorrowedItemEntryWindow(action.viewModel);
                 newBorrowedItemEntryWindow.Show();
             });
+
+            Messenger.Default.Register<ViewModelCarrier<string>>(this, (action) =>
+            {
+                LibraryItemDescriptionWindow libraryItemDescriptionWindow = new LibraryItemDescriptionWindow(action.viewModel);
+                libraryItemDescriptionWindow.Show();
+            });
         }
 
         private void EnableListViewScrolling(object sender, MouseWheelEventArgs e)
@@ -34,13 +40,6 @@ namespace GTL_Application.View
             ScrollViewer scrowViewer = (ScrollViewer)sender;
             scrowViewer.ScrollToVerticalOffset(scrowViewer.VerticalOffset - e.Delta/6);
             e.Handled = true;
-        }
-
-        private void Description_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            LibraryItemDescriptionWindow libraryItemDescriptionWindow = new LibraryItemDescriptionWindow(button.Tag.ToString());
-            libraryItemDescriptionWindow.ShowDialog();
         }
     }
 }

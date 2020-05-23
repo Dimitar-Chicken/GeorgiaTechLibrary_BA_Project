@@ -1,4 +1,5 @@
-﻿using GTL_Application.Interfaces;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GTL_Application.Interfaces;
 using GTL_Application.Model;
 using GTL_Application.Services;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ namespace GTL_Application.ViewModel
         private ObservableCollection<ILibraryItem> _filtered;
         private ICommand _getLibraryItemsListCommand;
         private ICommand _getFilteredLibraryItemsListCommand;
+        private ICommand _openDescriptionWindowCommand;
 
         public LibraryItemsListViewModel(IDataAccess dataAccess)
         {
@@ -65,6 +67,14 @@ namespace GTL_Application.ViewModel
             }
         }
 
+        public ICommand OpenDescriptionWindowCommand
+        {
+            get
+            {
+                return _openDescriptionWindowCommand ?? (_openDescriptionWindowCommand = new CommandHandlerWithParameters(itemDescription => OpenNewEntryWindow(itemDescription), () => true));
+            }
+        }
+
         public void GetLibraryItemsList()
         {
             _libraryItems = _dataAccess.GetLibraryItemList();
@@ -77,6 +87,12 @@ namespace GTL_Application.ViewModel
         public void GetFilteredLibraryItemsList()
         {
             FilteredLibraryItems = FilterList();
+        }
+
+        public void OpenNewEntryWindow(string itemDescription)
+        {
+            ViewModelCarrier<string> viewModelCarrier = new ViewModelCarrier<string>(itemDescription);
+            Messenger.Default.Send(viewModelCarrier);
         }
 
         public ObservableCollection<ILibraryItem> FilterList()
