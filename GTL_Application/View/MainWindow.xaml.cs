@@ -33,6 +33,12 @@ namespace GTL_Application.View
                 LibraryItemDescriptionWindow libraryItemDescriptionWindow = new LibraryItemDescriptionWindow(action.viewModel);
                 libraryItemDescriptionWindow.Show();
             });
+
+            Messenger.Default.Register<ViewModelCarrier<object[]>>(this, (action) =>
+            {
+                PersonMembershipDatesWindow personMembershipDatesWindow = new PersonMembershipDatesWindow(action.viewModel);
+                personMembershipDatesWindow.Show();
+            });
         }
 
         private void EnableListViewScrolling(object sender, MouseWheelEventArgs e)
