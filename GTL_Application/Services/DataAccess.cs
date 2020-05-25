@@ -3,7 +3,10 @@ using GTL_Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Security;
 
 namespace GTL_Application.Services
@@ -105,6 +108,86 @@ namespace GTL_Application.Services
             }
 
             return borrowableBookCopies;
+        }
+
+
+        public bool CreateNewBookBorrow(SecureString SSN, IBorrowableBookCopy borrowableBookCopy)
+        {
+            int result = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                //Declaring the SQL command.
+                SqlCommand command = new SqlCommand(null, connection);
+                SqlTransaction transaction;
+                transaction = connection.BeginTransaction("CreateNewBookBorrowTransaction");
+
+                command.Transaction = transaction;
+
+                try
+                {
+                    //Creating the parameters.
+                    SqlParameter borrowerSSN = new SqlParameter("@borrowerSSN", SqlDbType.Char, 13);
+                    SqlParameter bookCopy = new SqlParameter("@bookCopy", SqlDbType.Int);
+                    SqlParameter borrowDate = new SqlParameter("@borrowDate", SqlDbType.Date);
+                    SqlParameter returnDate = new SqlParameter("@returnDate", SqlDbType.Date);
+
+                    //Setting the parameter values.
+                    DateTime currentDate = DateTime.Today;
+
+                    borrowerSSN.Value = ConvertSecureStringToString(SSN);
+                    bookCopy.Value = Int32.Parse(ConvertSecureStringToString(borrowableBookCopy.ID));
+                    borrowDate.Value = currentDate;
+                    returnDate.Value = currentDate.AddDays(21);
+
+                    //Adding the parameters to the SQL command.
+                    command.Parameters.Add(borrowerSSN);
+                    command.Parameters.Add(bookCopy);
+                    command.Parameters.Add(borrowDate);
+                    command.Parameters.Add(returnDate);
+
+                    //Preparing the SQL command and executing it.
+                    command.CommandText = "INSERT INTO [LibraryItems].[Borrow]([BorrowerSSN],[BookCopy],[BorrowDate],[ReturnDate]) " +
+                                  "VALUES(@borrowerSSN,@bookCopy,@borrowDate,@returnDate)";
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                    command.CommandText = "UPDATE [LibraryItems].[BookCopy] " +
+                                          "SET[BookStatus] = 'On Loan' " +
+                                          "WHERE [BookCopyID] = @bookCopy";
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+
+                    }
+                }
+            }
+
+            return result >= 0;
+        }
+
+        public static String ConvertSecureStringToString(SecureString input)
+        {
+            IntPtr bstr = Marshal.SecureStringToBSTR(input);
+
+            try
+            {
+                return Marshal.PtrToStringBSTR(bstr);
+            }
+            finally
+            {
+                Marshal.FreeBSTR(bstr);
+            }
         }
 
         /// <summary>
