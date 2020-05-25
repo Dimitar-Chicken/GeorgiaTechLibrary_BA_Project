@@ -110,6 +110,41 @@ namespace GTL_Application.Services
             return borrowableBookCopies;
         }
 
+        public ObservableCollection<IPerson> GetPeople()
+        {
+            ObservableCollection<IPerson> people = new ObservableCollection<IPerson>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"SELECT * FROM [Views].[GetMembers]";
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    Person person = new Person
+                    {
+                        SSN = ConvertToSecureString(dataReader["SSN"].ToString()),
+                        PersonName = dataReader["PersonName"].ToString(),
+                        Type = dataReader["Type"].ToString(),
+                        Address = dataReader["Address"].ToString(),
+                        Phone = dataReader["Phone"].ToString(),
+                        Email = dataReader["Email"].ToString()
+                    };
+
+                    if (person.Type == "Member")
+                    {
+                        person.MembershipStartDate = Convert.ToDateTime(dataReader["MembershipStartDate"]);
+                        person.MembershipEndDate = Convert.ToDateTime(dataReader["MembershipEndDate"]);
+                    }
+
+                    people.Add(person);
+                }
+            }
+
+            return people;
+        }
 
         public bool CreateNewBookBorrow(SecureString SSN, IBorrowableBookCopy borrowableBookCopy)
         {
