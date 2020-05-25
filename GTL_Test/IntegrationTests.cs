@@ -23,24 +23,10 @@ namespace GTL_Test
         }
 
         [Fact]
-        public void TC001_LibraryItemsListViewModel_GetLibraryItemsListCommand_Passes()
-        {
-            libraryItemsListViewModel.GetLibraryItemsListCommand.Execute(null);
-            Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
-        }
-
-        [Fact]
         public void TC001_LibraryItemsListViewModel_GetFilteredLibraryItemsListCommand_Passes()
         {
             libraryItemsListViewModel.GetFilteredLibraryItemsListCommand.Execute(null);
             Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
-        }
-
-        [Fact]
-        public void TC002_BorrowedItemsListViewModel_GetLibraryItemBorrowsListCommand_Passes()
-        {
-            borrowedItemsListViewModel.GetLibraryItemBorrowsListCommand.Execute(null);
-            Assert.NotEmpty(borrowedItemsListViewModel.FilteredLibraryItemBorrows);
         }
 
         [Fact]
