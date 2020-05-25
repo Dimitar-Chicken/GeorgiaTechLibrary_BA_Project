@@ -10,7 +10,5 @@ namespace GTL_Application.Interfaces
         public void InitializeAll();
 
         public void GetFilteredLibraryItemBorrowsList();
-
-        public ObservableCollection<ILibraryItemBorrow> FilterList();
     }
 }
