@@ -22,13 +22,6 @@ namespace GTL_Test
         }
 
         [Fact]
-        public void TC002_BorrowedItemsListViewModel_GetLibraryItemBorrowsListCommand_Passes()
-        {
-            borrowedItemsListViewModel.GetLibraryItemBorrowsListCommand.Execute(null);
-            Assert.NotEmpty(borrowedItemsListViewModel.FilteredLibraryItemBorrows);
-        }
-
-        [Fact]
         public void TC002_BorrowedItemsListViewModel_GetFilteredLibraryItemBorrowsListCommand_Passes()
         {
             borrowedItemsListViewModel.GetFilteredLibraryItemBorrowsListCommand.Execute(null);
@@ -48,7 +41,8 @@ namespace GTL_Test
 
             borrowedItemsListViewModel.SearchText = searchText;
 
-            result = borrowedItemsListViewModel.FilterList();
+            borrowedItemsListViewModel.GetFilteredLibraryItemBorrowsList();
+            result = borrowedItemsListViewModel.FilteredLibraryItemBorrows;
 
             Assert.Contains(result[0].GetType().GetProperties(), p => p.GetValue(result[0]).ToString().Contains(searchText));
         }

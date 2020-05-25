@@ -42,7 +42,8 @@ namespace GTL_Test
 
             libraryItemsListViewModel.SearchText = searchText;
 
-            result = libraryItemsListViewModel.FilterList();
+            libraryItemsListViewModel.GetFilteredLibraryItemsList();
+            result = libraryItemsListViewModel.FilteredLibraryItems;
 
             Assert.Contains(result[0].GetType().GetProperties(), p => p.GetValue(result[0]).ToString().Contains(searchText));
         }
