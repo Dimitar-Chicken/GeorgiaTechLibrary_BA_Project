@@ -9,6 +9,7 @@ namespace GTL_Application.Interfaces
         public ObservableCollection<ILibraryItem> GetLibraryItemList();
         public ObservableCollection<ILibraryItemBorrow> GetLibraryItemBorrowsList();
         public ObservableCollection<IBorrowableBookCopy> GetBorrowableBookCopiesList();
+        public ObservableCollection<IPerson> GetPeople();
         public bool CreateNewBookBorrow(SecureString SSN, IBorrowableBookCopy borrowableBookCopy);
     }
 }
