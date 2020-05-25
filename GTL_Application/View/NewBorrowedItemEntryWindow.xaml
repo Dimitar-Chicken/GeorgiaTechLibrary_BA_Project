@@ -25,11 +25,11 @@
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Text="Enter Borrower SSN:"/>
-        <TextBox Grid.Row="1"
-                 Grid.Column="0"
-                 Text="{Binding BorrowerSSN, UpdateSourceTrigger=PropertyChanged}"
-                 HorizontalAlignment="Stretch"
-                 Background="White"/>
+        <PasswordBox x:Name="PasswordBox"
+                     Grid.Row="1"
+                     Grid.Column="0"
+                     HorizontalAlignment="Stretch"
+                     Background="White"/>
         <TextBlock Grid.Row="2"
                    Grid.Column="0"
                    Text="Book:"/>
@@ -51,6 +51,8 @@
                 Margin="5,2,5,2"
                 HorizontalAlignment="Center"
                 Content="Create"
-                Command="{Binding Path=CreateNewLibraryItemBorrowEntryCommand}"/>
+                Command="{Binding Path=CreateNewLibraryItemBorrowEntryCommand}"
+                CommandParameter="{Binding ElementName=PasswordBox}"
+                Click="Button_Click"/>
     </Grid>
 </Window>
