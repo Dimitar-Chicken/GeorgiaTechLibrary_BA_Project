@@ -82,27 +82,27 @@ namespace GTL_Application.Services
 
         public ObservableCollection<IBorrowableBookCopy> GetBorrowableBookCopiesList()
         {
-            using SqlConnection connection = new SqlConnection(connectionString);
             ObservableCollection<IBorrowableBookCopy> borrowableBookCopies = new ObservableCollection<IBorrowableBookCopy>();
-            connection.Open();
-
-            string query = @"SELECT * FROM [Views].[GetBorrowableBookCopies]";
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlDataReader dataReader = command.ExecuteReader();
-
-            while (dataReader.Read())
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                BorrowableBookCopy borrowableBookCopy = new BorrowableBookCopy
+                connection.Open();
+
+                string query = @"SELECT * FROM [Views].[GetBorrowableBookCopies]";
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
                 {
-                    ID = ConvertToSecureString(dataReader["BookCopyID"].ToString()),
-                    Title = dataReader["Title"].ToString(),
-                    Authors = dataReader["AuthorsNames"].ToString()
-                };
+                    BorrowableBookCopy borrowableBookCopy = new BorrowableBookCopy
+                    {
+                        ID = ConvertToSecureString(dataReader["BookCopyID"].ToString()),
+                        Title = dataReader["Title"].ToString(),
+                        Authors = dataReader["AuthorsNames"].ToString()
+                    };
 
-                borrowableBookCopies.Add(borrowableBookCopy);
+                    borrowableBookCopies.Add(borrowableBookCopy);
+                }
             }
-            connection.Close();
-
 
             return borrowableBookCopies;
         }
