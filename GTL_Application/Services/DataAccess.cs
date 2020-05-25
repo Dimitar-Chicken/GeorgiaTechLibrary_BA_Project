@@ -22,59 +22,60 @@ namespace GTL_Application.Services
 
         public ObservableCollection<ILibraryItem> GetLibraryItemList()
         {
-            using SqlConnection connection = new SqlConnection(connectionString);
             ObservableCollection<ILibraryItem> libraryItems = new ObservableCollection<ILibraryItem>();
-            connection.Open();
-
-            string query = @"SELECT * FROM [Views].[GetLibraryItems]";
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlDataReader dataReader = command.ExecuteReader();
-
-            while (dataReader.Read())
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                LibraryItem libraryItem = new LibraryItem
-                {
-                    Title = dataReader["Title"].ToString(),
-                    Authors = dataReader["AuthorsNames"].ToString(),
-                    SubjectArea = dataReader["SubjectArea"].ToString(),
-                    ItemDescription = dataReader["ItemDescription"].ToString(),
-                    TypeName = dataReader["LibraryItemType"].ToString()
-                };
+                connection.Open();
 
-                libraryItems.Add(libraryItem);
+                string query = @"SELECT * FROM [Views].[GetLibraryItems]";
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    LibraryItem libraryItem = new LibraryItem
+                    {
+                        Title = dataReader["Title"].ToString(),
+                        Authors = dataReader["AuthorsNames"].ToString(),
+                        SubjectArea = dataReader["SubjectArea"].ToString(),
+                        ItemDescription = dataReader["ItemDescription"].ToString(),
+                        TypeName = dataReader["LibraryItemType"].ToString()
+                    };
+
+                    libraryItems.Add(libraryItem);
+                }
             }
-            connection.Close();
 
             return libraryItems;
         }
 
         public ObservableCollection<ILibraryItemBorrow> GetLibraryItemBorrowsList()
         {
-            using SqlConnection connection = new SqlConnection(connectionString);
             ObservableCollection<ILibraryItemBorrow> libraryItemBorrows = new ObservableCollection<ILibraryItemBorrow>();
-            connection.Open();
-
-            string query = @"SELECT * FROM [Views].[GetBookBorrows]";
-            SqlCommand command = new SqlCommand(query, connection);
-            SqlDataReader dataReader = command.ExecuteReader();
-
-            while (dataReader.Read())
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                LibraryItemBorrow libraryItemBorrow = new LibraryItemBorrow
+                connection.Open();
+
+                string query = @"SELECT * FROM [Views].[GetBookBorrows]";
+                SqlCommand command = new SqlCommand(query, connection);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
                 {
-                    PersonName = dataReader["PersonName"].ToString(),
-                    Title = dataReader["Title"].ToString(),
-                    ISBN = dataReader["ISBN"].ToString(),
-                    Status = dataReader["BookStatus"].ToString(),
-                    //TODO: Add check for Parsing success.
-                    BorrowDate = Convert.ToDateTime(dataReader["BorrowDate"]),
-                    ReturnDate = Convert.ToDateTime(dataReader["ReturnDate"])
-                };
+                    LibraryItemBorrow libraryItemBorrow = new LibraryItemBorrow
+                    {
+                        PersonName = dataReader["PersonName"].ToString(),
+                        Title = dataReader["Title"].ToString(),
+                        ISBN = dataReader["ISBN"].ToString(),
+                        Status = dataReader["BookStatus"].ToString(),
+                        //TODO: Add check for Parsing success.
+                        BorrowDate = Convert.ToDateTime(dataReader["BorrowDate"]),
+                        ReturnDate = Convert.ToDateTime(dataReader["ReturnDate"])
+                    };
 
-                libraryItemBorrows.Add(libraryItemBorrow);
+                    libraryItemBorrows.Add(libraryItemBorrow);
+                }
             }
-            connection.Close();
-
 
             return libraryItemBorrows;
         }
@@ -93,7 +94,7 @@ namespace GTL_Application.Services
             {
                 BorrowableBookCopy borrowableBookCopy = new BorrowableBookCopy
                 {
-                    ID = convertToSecureString(dataReader["BookCopyID"].ToString()),
+                    ID = ConvertToSecureString(dataReader["BookCopyID"].ToString()),
                     Title = dataReader["Title"].ToString(),
                     Authors = dataReader["AuthorsNames"].ToString()
                 };
@@ -111,7 +112,7 @@ namespace GTL_Application.Services
         /// </summary>
         /// <param name="input"></param>
         /// <returns>SecureString result</returns>
-        public SecureString convertToSecureString(string input)
+        public SecureString ConvertToSecureString(string input)
         {
             if (input == null)
                 return null;
