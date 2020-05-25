@@ -5,12 +5,12 @@ using System.Windows.Input;
 
 namespace GTL_Application.Services
 {
-    class CommandHandlerWithParameters : ICommand
+    class CommandHandlerWithParameters<T> : ICommand
     {
-        private Action<string> _action;
+        private Action<T> _action;
         private Func<bool> _canExecute;
 
-        public CommandHandlerWithParameters(Action<string> action, Func<bool> canExecute)
+        public CommandHandlerWithParameters(Action<T> action, Func<bool> canExecute)
         {
             _action = action;
             _canExecute = canExecute;
@@ -30,7 +30,8 @@ namespace GTL_Application.Services
 
         public void Execute(object parameter)
         {
-            _action(parameter.ToString());
+            T converted = (T) parameter;
+            _action(converted);
         }
     }
 }
