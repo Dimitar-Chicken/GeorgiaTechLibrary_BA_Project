@@ -1,5 +1,6 @@
 ﻿using GTL_Application.Model;
 using System.Collections.ObjectModel;
+using System.Security;
 
 namespace GTL_Application.Interfaces
 {
@@ -8,5 +9,6 @@ namespace GTL_Application.Interfaces
         public ObservableCollection<ILibraryItem> GetLibraryItemList();
         public ObservableCollection<ILibraryItemBorrow> GetLibraryItemBorrowsList();
         public ObservableCollection<IBorrowableBookCopy> GetBorrowableBookCopiesList();
+        public bool CreateNewBookBorrow(SecureString SSN, IBorrowableBookCopy borrowableBookCopy);
     }
 }
