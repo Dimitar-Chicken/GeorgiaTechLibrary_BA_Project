@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GTL_Application.View"
         mc:Ignorable="d"
+        Height="150"
+        Width="300"
         ResizeMode="NoResize"
-        Title="PersonMembershipDatesWindow" Height="150" Width="300">
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
