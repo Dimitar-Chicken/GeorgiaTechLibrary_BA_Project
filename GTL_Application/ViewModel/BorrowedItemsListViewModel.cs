@@ -74,7 +74,7 @@ namespace GTL_Application.ViewModel
             }
             else
             {
-                FilteredLibraryItemBorrows = FilterList();
+                FilteredLibraryItemBorrows = FilterList<ILibraryItemBorrow>(_libraryItemBorrows, _filtered, SearchText);
             }
         }
 
@@ -83,29 +83,6 @@ namespace GTL_Application.ViewModel
             NewBorrowedItemEntryViewModel newBorrowedItemEntryViewModel = new NewBorrowedItemEntryViewModel(_dataAccess);
             ViewModelCarrier<INewBorrowedItemEntryViewModel> viewModelCarrier = new ViewModelCarrier<INewBorrowedItemEntryViewModel>(newBorrowedItemEntryViewModel);
             Messenger.Default.Send(viewModelCarrier);
-        }
-
-        public ObservableCollection<ILibraryItemBorrow> FilterList()
-        {
-            _filtered.Clear();
-            foreach (LibraryItemBorrow item in _libraryItemBorrows)
-            {
-                // Gather a list of all the properties of the LibraryItem object instance.
-                PropertyInfo[] props = item.GetType().GetProperties();
-                // Iterate over the individual properties and retrieve the values using the Get methods.
-                foreach (var p in props)
-                {
-                    var val = p.GetValue(item);
-                    if (val == null)
-                        return _libraryItemBorrows;
-
-                    // If the property contains the SearchText string, set the FilterEventArgs Accepted flag to true in order to display it in the Collection.
-                    if (val.ToString().ToUpper().Contains(SearchText.ToUpper()))
-                        _filtered.Add(item);
-                }
-            }
-
-            return _filtered;
         }
     }
 }

@@ -75,7 +75,7 @@ namespace GTL_Application.ViewModel
             }
             else
             {
-                FilteredLibraryItems = FilterList();
+                FilteredLibraryItems = FilterList<ILibraryItem>(_libraryItems, _filtered, SearchText);
             }
         }
 
@@ -83,30 +83,6 @@ namespace GTL_Application.ViewModel
         {
             ViewModelCarrier<string> viewModelCarrier = new ViewModelCarrier<string>(itemDescription);
             Messenger.Default.Send(viewModelCarrier);
-        }
-
-        public ObservableCollection<ILibraryItem> FilterList()
-        {
-
-            _filtered.Clear();
-            foreach (ILibraryItem item in _libraryItems)
-            {
-                // Gather a list of all the properties of the LibraryItem object instance.
-                PropertyInfo[] props = item.GetType().GetProperties();
-                // Iterate over the individual properties and retrieve the values using the Get methods.
-                foreach (var p in props)
-                {
-                    var val = p.GetValue(item);
-                    if (val == null)
-                        return _libraryItems;
-
-                    // If the property contains the SearchText string, set the FilterEventArgs Accepted flag to true in order to display it in the Collection.
-                    if (val.ToString().ToUpper().Contains(SearchText.ToUpper()))
-                        _filtered.Add(item);
-                }
-            }
-
-            return _filtered;
         }
     }
 }
