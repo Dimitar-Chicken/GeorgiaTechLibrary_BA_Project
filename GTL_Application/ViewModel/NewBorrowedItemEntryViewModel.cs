@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security;
 using System.Text;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace GTL_Application.ViewModel
@@ -15,7 +16,7 @@ namespace GTL_Application.ViewModel
         private IDataAccess _dataAccess;
         private ICommand _getBorrowableBookCopiesCommand;
         private ICommand _createNewLibraryItemBorrowEntryCommand;
-        private SecureString _borrowerSSN;
+        private bool _result;
         private IBorrowableBookCopy _selectedBorrowableBookCopy;
         private ObservableCollection<IBorrowableBookCopy> _borrowableBookCopiesList;
         public NewBorrowedItemEntryViewModel(IDataAccess dataAccess)
@@ -25,15 +26,15 @@ namespace GTL_Application.ViewModel
             GetBorrowableBookCopiesList();
         }
 
-        public SecureString BorrowerSSN
+        public bool Result
         {
             get
             {
-                return _borrowerSSN;
+                return _result;
             }
             set
             {
-                SetProperty(ref _borrowerSSN, value);
+                SetProperty(ref _result, value);
             }
         }
 
@@ -73,18 +74,19 @@ namespace GTL_Application.ViewModel
         {
             get
             {
-                return _createNewLibraryItemBorrowEntryCommand ?? (_createNewLibraryItemBorrowEntryCommand = new CommandHandler(() => CreateNewLibraryItemBorrowEntry(), () => true));
+                return _createNewLibraryItemBorrowEntryCommand ?? (_createNewLibraryItemBorrowEntryCommand = new CommandHandlerWithParameters<object>((input) => CreateNewLibraryItemBorrowEntry(input), () => true));
             }
         }
 
         public void GetBorrowableBookCopiesList()
         {
-            _borrowableBookCopiesList = _dataAccess.GetBorrowableBookCopiesList();
+            BorrowableBookCopiesList = _dataAccess.GetBorrowableBookCopiesList();
         }
 
-        public void CreateNewLibraryItemBorrowEntry()
+        public void CreateNewLibraryItemBorrowEntry(object input)
         {
-            throw new NotImplementedException();
+            PasswordBox passwordBox = input as PasswordBox;
+            Result = _dataAccess.CreateNewBookBorrow(passwordBox.SecurePassword, SelectedBorrowableBookCopy);
         }
     }
 }
