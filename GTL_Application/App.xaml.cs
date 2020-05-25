@@ -32,7 +32,7 @@ namespace GTL_Application
             mainWindowViewModel = new MainWindowViewModel();
             libraryItemsListViewModel = new LibraryItemsListViewModel(dataAccess);
             borrowedItemsListViewModel = new BorrowedItemsListViewModel(dataAccess);
-            peopleListViewModel = new PeopleListViewModel();
+            peopleListViewModel = new PeopleListViewModel(dataAccess);
 
             // Application is running
             // Process command line args
