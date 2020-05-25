@@ -24,5 +24,10 @@ namespace GTL_Application.View
             InitializeComponent();
             DataContext = newBorrowedItemEntryViewModel;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
