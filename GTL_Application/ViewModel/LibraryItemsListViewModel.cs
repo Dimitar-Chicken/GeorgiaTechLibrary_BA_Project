@@ -62,7 +62,7 @@ namespace GTL_Application.ViewModel
         {
             get
             {
-                return _openDescriptionWindowCommand ?? (_openDescriptionWindowCommand = new CommandHandlerWithParameters(itemDescription => OpenItemDescriptionWindow(itemDescription), () => true));
+                return _openDescriptionWindowCommand ?? (_openDescriptionWindowCommand = new CommandHandlerWithParameters<string>((itemDescription) => OpenItemDescriptionWindow(itemDescription), () => true));
             }
         }
 
