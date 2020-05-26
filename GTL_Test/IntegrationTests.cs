@@ -24,6 +24,8 @@ namespace GTL_Test
         readonly DataAccess dataAccess;
         readonly LibraryItemsListViewModel libraryItemsListViewModel;
         readonly BorrowedItemsListViewModel borrowedItemsListViewModel;
+        readonly NewBorrowedItemEntryViewModel newBorrowedItemEntryViewModel;
+        readonly PeopleListViewModel peopleListViewModel;
 
         public IntegrationTests ()
         {
@@ -39,11 +41,26 @@ namespace GTL_Test
             dataAccess = new DataAccess();
             libraryItemsListViewModel = new LibraryItemsListViewModel(dataAccess);
             borrowedItemsListViewModel = new BorrowedItemsListViewModel(dataAccess);
+            newBorrowedItemEntryViewModel = new NewBorrowedItemEntryViewModel(dataAccess);
+            peopleListViewModel = new PeopleListViewModel(dataAccess);
         }
 
         [Fact]
         public void TC001_LibraryItemsListViewModel_GetFilteredLibraryItemsListCommand_Passes()
         {
+            libraryItemsListViewModel.GetFilteredLibraryItemsListCommand.Execute(null);
+
+            Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
+        }
+
+        [Theory]
+        [InlineData("Tanek")]
+        [InlineData("John")]
+        [InlineData("Aliquam")]
+        public void TC001_LibraryItemsListViewModel_GetFilteredLibraryItemsListCommand_SearchText_Passes(string searchText)
+        {
+            libraryItemsListViewModel.SearchText = searchText;
+
             libraryItemsListViewModel.GetFilteredLibraryItemsListCommand.Execute(null);
 
             Assert.NotEmpty(libraryItemsListViewModel.FilteredLibraryItems);
@@ -55,6 +72,27 @@ namespace GTL_Test
             borrowedItemsListViewModel.GetFilteredLibraryItemBorrowsListCommand.Execute(null);
 
             Assert.NotEmpty(borrowedItemsListViewModel.FilteredLibraryItemBorrows);
+        }
+
+        [Theory]
+        [InlineData("1649111101773")]
+        [InlineData("1694052205484")]
+        [InlineData("On Loan")]
+        public void TC002_BorrowedItemsListViewModel_GetFilteredLibraryItemBorrowsListCommand_SearchText_Passes(string searchText)
+        {
+            borrowedItemsListViewModel.SearchText = searchText;
+
+            borrowedItemsListViewModel.GetFilteredLibraryItemBorrowsListCommand.Execute(null);
+
+            Assert.NotEmpty(borrowedItemsListViewModel.FilteredLibraryItemBorrows);
+        }
+
+        [Fact]
+        public void TC007_NewBorrowedItemEntryViewModel_GetBorrowableBookCopiesListCommand_Passes()
+        {
+            newBorrowedItemEntryViewModel.GetBorrowableBookCopiesListCommand.Execute(null);
+
+            Assert.NotEmpty(newBorrowedItemEntryViewModel.BorrowableBookCopiesList);
         }
 
         [Fact]
@@ -108,6 +146,36 @@ namespace GTL_Test
             result = dataAccess.CreateNewBookBorrow(SSN, borrowableBookCopy);
 
             Assert.True(result);
+        }
+
+        [Fact]
+        public void TC012_DataAccess_CreateNewBookBorrow_SQLInjection_ThrowsException()
+        {
+            SecureString SSN = new NetworkCredential("", "); DROP TABLE [LibraryItems].[Borrow];--").SecurePassword;
+            IBorrowableBookCopy borrowableBookCopy = new BorrowableBookCopy() { ID = new NetworkCredential("", "51").SecurePassword };
+
+            Assert.Throws<SqlException>(() => dataAccess.CreateNewBookBorrow(SSN, borrowableBookCopy));
+        }
+
+        [Fact]
+        public void TC014_PeopleListViewModel_GetFilteredPeopleListCommand_Passes()
+        {
+            peopleListViewModel.GetFilteredPeopleListCommand.Execute(null);
+
+            Assert.NotEmpty(peopleListViewModel.FilteredPeopleList);
+        }
+
+        [Theory]
+        [InlineData("Donna")]
+        [InlineData("Member")]
+        [InlineData("Professor")]
+        public void TC014_PeopleListViewModel_GetFilteredPeopleListCommand_SearchText_Passes(string searchText)
+        {
+            peopleListViewModel.SearchText = searchText;
+
+            peopleListViewModel.GetFilteredPeopleListCommand.Execute(null);
+
+            Assert.NotEmpty(peopleListViewModel.FilteredPeopleList);
         }
     }
 }
