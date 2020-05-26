@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace GTL_Application.Services
 {
-    class CommandHandler : ICommand
+    public class CommandHandler : ICommand
     {
         private Action _action;
         private Func<bool> _canExecute;
