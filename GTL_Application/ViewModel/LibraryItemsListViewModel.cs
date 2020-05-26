@@ -1,4 +1,5 @@
-﻿using GTL_Application.Interfaces;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GTL_Application.Interfaces;
 using GTL_Application.Model;
 using GTL_Application.Services;
 using System.Collections.ObjectModel;
@@ -15,8 +16,8 @@ namespace GTL_Application.ViewModel
         protected readonly IDataAccess _dataAccess;
         private ObservableCollection<ILibraryItem> _libraryItems;
         private ObservableCollection<ILibraryItem> _filtered;
-        private ICommand _getLibraryItemsListCommand;
         private ICommand _getFilteredLibraryItemsListCommand;
+        private ICommand _openDescriptionWindowCommand;
 
         public LibraryItemsListViewModel(IDataAccess dataAccess)
         {
@@ -28,7 +29,7 @@ namespace GTL_Application.ViewModel
         {
             _libraryItems = new ObservableCollection<ILibraryItem>();
             _filtered = new ObservableCollection<ILibraryItem>();
-            GetLibraryItemsList();
+            GetFilteredLibraryItemsList();
         }
 
         public string SearchText
@@ -49,14 +50,6 @@ namespace GTL_Application.ViewModel
             set { SetProperty(ref _filtered, value); }
         }
 
-        public ICommand GetLibraryItemsListCommand
-        {
-            get
-            {
-                return _getLibraryItemsListCommand ?? (_getLibraryItemsListCommand = new CommandHandler(() => GetLibraryItemsList(), () => true));
-            }
-        }
-
         public ICommand GetFilteredLibraryItemsListCommand
         {
             get
@@ -65,48 +58,31 @@ namespace GTL_Application.ViewModel
             }
         }
 
-        public void GetLibraryItemsList()
+        public ICommand OpenDescriptionWindowCommand
+        {
+            get
+            {
+                return _openDescriptionWindowCommand ?? (_openDescriptionWindowCommand = new CommandHandlerWithParameters<string>((itemDescription) => OpenItemDescriptionWindow(itemDescription), () => true));
+            }
+        }
+
+        public void GetFilteredLibraryItemsList()
         {
             _libraryItems = _dataAccess.GetLibraryItemList();
             if (string.IsNullOrEmpty(SearchText))
             {
                 FilteredLibraryItems = _dataAccess.GetLibraryItemList();
             }
-        }
-
-        public void GetFilteredLibraryItemsList()
-        {
-            FilteredLibraryItems = FilterList();
-        }
-
-        public ObservableCollection<ILibraryItem> FilterList()
-        {
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                return _libraryItems;
-            }
             else
             {
-                _filtered.Clear();
-                foreach (ILibraryItem item in _libraryItems)
-                {
-                    // Gather a list of all the properties of the LibraryItem object instance.
-                    PropertyInfo[] props = item.GetType().GetProperties();
-                    // Iterate over the individual properties and retrieve the values using the Get methods.
-                    foreach (var p in props)
-                    {
-                        var val = p.GetValue(item);
-                        if (val == null)
-                            return _libraryItems;
-
-                        // If the property contains the SearchText string, set the FilterEventArgs Accepted flag to true in order to display it in the Collection.
-                        if (val.ToString().ToUpper().Contains(SearchText.ToUpper()))
-                            _filtered.Add(item);
-                    }
-                }
-
-                return _filtered;
+                FilteredLibraryItems = FilterList<ILibraryItem>(_libraryItems, _filtered, SearchText);
             }
+        }
+
+        public void OpenItemDescriptionWindow(string itemDescription)
+        {
+            ViewModelCarrier<string> viewModelCarrier = new ViewModelCarrier<string>(itemDescription);
+            Messenger.Default.Send(viewModelCarrier);
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using GTL_Application.Interfaces;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GTL_Application.Interfaces;
+using GTL_Application.Services;
 using GTL_Application.ViewModel;
+using GTL_Test.Helpers;
 using GTL_Test.Mocks;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -17,13 +20,6 @@ namespace GTL_Test
         {
             mockDataAccess = new MockDataAccess();
             borrowedItemsListViewModel = new BorrowedItemsListViewModel(mockDataAccess);
-        }
-
-        [Fact]
-        public void TC002_BorrowedItemsListViewModel_GetLibraryItemBorrowsListCommand_Passes()
-        {
-            borrowedItemsListViewModel.GetLibraryItemBorrowsListCommand.Execute(null);
-            Assert.NotEmpty(borrowedItemsListViewModel.FilteredLibraryItemBorrows);
         }
 
         [Fact]
@@ -46,10 +42,24 @@ namespace GTL_Test
 
             borrowedItemsListViewModel.SearchText = searchText;
 
-            result = borrowedItemsListViewModel.FilterList();
+            borrowedItemsListViewModel.GetFilteredLibraryItemBorrowsList();
+            result = borrowedItemsListViewModel.FilteredLibraryItemBorrows;
 
             Assert.Contains(result[0].GetType().GetProperties(), p => p.GetValue(result[0]).ToString().Contains(searchText));
         }
 
+        [Fact]
+        public void TC006_BorrowedItemsListViewModel_OpenNewEntryWindowCommand_Passes()
+        {
+            INewBorrowedItemEntryViewModel result = null;
+
+            Messenger.Default.Register<ViewModelCarrier<INewBorrowedItemEntryViewModel>>(this, (action) =>
+            {
+                result = action.viewModel;
+            });
+
+            borrowedItemsListViewModel.OpenNewEntryWindowCommand.Execute(null);
+            Assert.IsType<NewBorrowedItemEntryViewModel>(result);
+        }
     }
 }

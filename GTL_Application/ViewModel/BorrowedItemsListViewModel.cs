@@ -1,6 +1,8 @@
-﻿using GTL_Application.Interfaces;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GTL_Application.Interfaces;
 using GTL_Application.Model;
 using GTL_Application.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Windows.Input;
@@ -10,11 +12,11 @@ namespace GTL_Application.ViewModel
     public class BorrowedItemsListViewModel : MainWindowViewModel, IBorrowedItemsListViewModel
     {
         private string _searchText;
-        protected readonly IDataAccess _dataAccess;
+        private readonly IDataAccess _dataAccess;
         private ObservableCollection<ILibraryItemBorrow> _libraryItemBorrows;
         private ObservableCollection<ILibraryItemBorrow> _filtered;
-        private ICommand _getLibraryItemBorrowsListCommand;
         private ICommand _getFilteredLibraryItemBorrowsListCommand;
+        private ICommand _openNewEntryWindowCommand;
 
         public BorrowedItemsListViewModel(IDataAccess dataAccess)
         {
@@ -26,7 +28,7 @@ namespace GTL_Application.ViewModel
         {
             _libraryItemBorrows = new ObservableCollection<ILibraryItemBorrow>();
             _filtered = new ObservableCollection<ILibraryItemBorrow>();
-            GetLibraryItemBorrowsList();
+            GetFilteredLibraryItemBorrowsList();
         }
 
         public string SearchText
@@ -47,14 +49,6 @@ namespace GTL_Application.ViewModel
             set { SetProperty(ref _filtered, value); }
         }
 
-        public ICommand GetLibraryItemBorrowsListCommand
-        {
-            get
-            {
-                return _getLibraryItemBorrowsListCommand ?? (_getLibraryItemBorrowsListCommand = new CommandHandler(() => GetLibraryItemBorrowsList(), () => true));
-            }
-        }
-
         public ICommand GetFilteredLibraryItemBorrowsListCommand
         {
             get
@@ -63,48 +57,32 @@ namespace GTL_Application.ViewModel
             }
         }
 
-        public void GetLibraryItemBorrowsList()
+        public ICommand OpenNewEntryWindowCommand
+        {
+            get
+            {
+                return _openNewEntryWindowCommand ?? (_openNewEntryWindowCommand = new CommandHandler(() => OpenNewEntryWindow(), () => true));
+            }
+        }
+
+        public void GetFilteredLibraryItemBorrowsList()
         {
             _libraryItemBorrows = _dataAccess.GetLibraryItemBorrowsList();
             if (string.IsNullOrEmpty(SearchText))
             {
                 FilteredLibraryItemBorrows = _dataAccess.GetLibraryItemBorrowsList();
             }
-        }
-
-        public void GetFilteredLibraryItemBorrowsList()
-        {
-            FilteredLibraryItemBorrows = FilterList();
-        }
-
-        public ObservableCollection<ILibraryItemBorrow> FilterList()
-        {
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                return _libraryItemBorrows;
-            }
             else
             {
-                _filtered.Clear();
-                foreach (LibraryItemBorrow item in _libraryItemBorrows)
-                {
-                    // Gather a list of all the properties of the LibraryItem object instance.
-                    PropertyInfo[] props = item.GetType().GetProperties();
-                    // Iterate over the individual properties and retrieve the values using the Get methods.
-                    foreach (var p in props)
-                    {
-                        var val = p.GetValue(item);
-                        if (val == null)
-                            return _libraryItemBorrows;
-
-                        // If the property contains the SearchText string, set the FilterEventArgs Accepted flag to true in order to display it in the Collection.
-                        if (val.ToString().ToUpper().Contains(SearchText.ToUpper()))
-                            _filtered.Add(item);
-                    }
-                }
-
-                return _filtered;
+                FilteredLibraryItemBorrows = FilterList<ILibraryItemBorrow>(_libraryItemBorrows, _filtered, SearchText);
             }
+        }
+
+        public void OpenNewEntryWindow()
+        {
+            NewBorrowedItemEntryViewModel newBorrowedItemEntryViewModel = new NewBorrowedItemEntryViewModel(_dataAccess);
+            ViewModelCarrier<INewBorrowedItemEntryViewModel> viewModelCarrier = new ViewModelCarrier<INewBorrowedItemEntryViewModel>(newBorrowedItemEntryViewModel);
+            Messenger.Default.Send(viewModelCarrier);
         }
     }
 }

@@ -4,35 +4,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GTL_Application"
         xmlns:ViewModel="clr-namespace:GTL_Application.ViewModel"
+        xmlns:Services="clr-namespace:GTL_Application.Services"
         xmlns:SampleData="clr-namespace:GTL_Application.SampleData"
-        x:Class="GTL_Application.MainWindow"
+        x:Class="GTL_Application.View.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="400"
         Width="800"
         WindowState="Maximized"
         d:DataContext="{d:DesignInstance SampleData:MainWindowSampleData, IsDesignTimeCreatable=True}">
+    <Window.Resources>
+        <Services:ButtonVisibilityConverter x:Key="ButtonVisibilityConverter"/>
+        <Services:MultibindConverter x:Key="MultibindConverter"/>
+    </Window.Resources>
+
     <TabControl HorizontalAlignment="Stretch">
         <TabItem x:Name="LibraryItemListTab"
                  Header="Library Item List">
             <DockPanel>
-                <Button DockPanel.Dock="Top"
-                        Content="Refresh"
-                        Command="{Binding GetLibraryItemsListCommand}"/>
                 <DockPanel DockPanel.Dock="Top"
-                           Margin="5">
-                    <!--<Label Content="Search:"
-                           DockPanel.Dock="Left"/>-->
+                            Margin="5"
+                            HorizontalAlignment="Stretch">
                     <Button DockPanel.Dock="Left"
-                            Content="Filter"
+                            Margin="0,0,5,0"
                             Padding="5,2,5,2"
-                            IsDefault="{Binding ElementName=LibraryItemSearchTextBox, Path=IsKeyboardFocused}"
-                            Command="{Binding Path=GetFilteredLibraryItemsListCommand}"/>
-                    <TextBox x:Name="LibraryItemSearchTextBox" 
+                            Content="Refresh"
+                            IsDefault="{Binding ElementName=LibraryItemsSearchTextBox, Path=IsKeyboardFocused}"
+                            Command="{Binding GetFilteredLibraryItemsListCommand}"/>
+                    <TextBox x:Name="LibraryItemsSearchTextBox"
                              DockPanel.Dock="Top"
+                             Padding="5,2,5,2"
                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
                              TextWrapping="Wrap"
                              VerticalContentAlignment="Center"/>
                 </DockPanel>
@@ -57,7 +59,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Rectangle Grid.Column="0"
                                            Grid.Row="0"
@@ -82,7 +84,7 @@
                                     <TextBlock Grid.Row="1"
                                            Grid.Column="1"
                                            Style="{StaticResource SubTitleStyle}"
-                                           Text="{Binding Author, StringFormat='by {0}'}"
+                                           Text="{Binding Authors, StringFormat='by {0}'}"
                                            VerticalAlignment="Top"
                                            Margin="5, 0, 5, 0"/>
                                     <TextBlock Grid.Row="2"
@@ -96,15 +98,16 @@
                                            FontSize="10"
                                            HorizontalAlignment="Left"
                                            Margin="5, 0, 5, 0"/>
-                                    <Expander Grid.Row="0"
-                                          Grid.Column="2"
-                                          Grid.RowSpan="3"
-                                          Header="Description"
-                                          VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding ItemDescription}"
-                                               TextWrapping="Wrap"
-                                               Width="500"/>
-                                    </Expander>
+                                    <Button Grid.Row="0"
+                                            Grid.Column="2"
+                                            Grid.RowSpan="3"
+                                            Margin="0, 0, 10, 0"
+                                            Padding="5,2,5,2"
+                                            Content="Description"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Right"
+                                            Command="{Binding ElementName=LibraryItemListTab, Path=DataContext.OpenDescriptionWindowCommand}"
+                                            CommandParameter="{Binding ItemDescription}"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -115,26 +118,32 @@
         <TabItem x:Name="BorrowedItemsTab"
                  Header="Borrowed Items">
             <DockPanel>
-                <Button DockPanel.Dock="Top"
-                        Content="Refresh"
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding Path=GetLibraryItemBorrowsListCommand}"/>
-                <DockPanel DockPanel.Dock="Top"
-                           Margin="5">
-                    <!--<Label DockPanel.Dock="Left"
-                       Content="Search:"/>-->
+                <StackPanel DockPanel.Dock="Top"
+                            Orientation="Horizontal"
+                            Margin="0, 5, 5, 5"
+                            HorizontalAlignment="Center">
                     <Button DockPanel.Dock="Left"
-                            Content="Filter"
+                            Content="New Entry"
                             Padding="5,2,5,2"
-                            IsDefault="{Binding ElementName=BorrowedItemsSearchTextBox, Path=IsKeyboardFocused}"
-                            Command="{Binding Path=GetFilteredLibraryItemBorrowsListCommand}"/>
-                    <TextBox x:Name="BorrowedItemsSearchTextBox"
+                            Margin="5,0,5,0"
+                            HorizontalAlignment="Center"
+                            Command="{Binding Path=OpenNewEntryWindowCommand}"/>
+                </StackPanel>
+                <DockPanel DockPanel.Dock="Top"
+                            Margin="5"
+                            HorizontalAlignment="Stretch">
+                    <Button DockPanel.Dock="Left"
+                            Margin="0,0,5,0"
+                            Padding="5,2,5,2"
+                            Content="Refresh"
+                            IsDefault="{Binding ElementName=LibraryItemBorrowsSearchTextBox, Path=IsKeyboardFocused}"
+                            Command="{Binding GetFilteredLibraryItemBorrowsListCommand}"/>
+                    <TextBox x:Name="LibraryItemBorrowsSearchTextBox"
                              DockPanel.Dock="Top"
+                             Padding="5,2,5,2"
                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             TextWrapping="Wrap"/>
+                             TextWrapping="Wrap"
+                             VerticalContentAlignment="Center"/>
                 </DockPanel>
                 <DataGrid DockPanel.Dock="Top"
                           ItemsSource="{Binding FilteredLibraryItemBorrows}"
@@ -167,7 +176,66 @@
         </TabItem>
         <TabItem x:Name="PeopleTab"
                  Header="People">
-            
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Top"
+                           Margin="5"
+                           HorizontalAlignment="Stretch">
+                    <Button DockPanel.Dock="Left"
+                            Margin="0,0,5,0"
+                            Padding="5,2,5,2"
+                            Content="Refresh"
+                            IsDefault="{Binding ElementName=MemberSearchTextBox, Path=IsKeyboardFocused}"
+                            Command="{Binding GetFilteredPeopleListCommand}"/>
+                    <TextBox x:Name="MemberSearchTextBox"
+                             DockPanel.Dock="Top"
+                             Padding="5,2,5,2"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                             TextWrapping="Wrap"
+                             VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DataGrid DockPanel.Dock="Top"
+                          ItemsSource="{Binding FilteredPeopleList}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserReorderColumns="False"
+                          Background="Gray">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name"
+                                            Binding="{Binding PersonName}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Address"
+                                            Binding="{Binding Address}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Phone"
+                                            Binding="{Binding Phone}"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Email"
+                                            Binding="{Binding Email}"
+                                            Width="*"/>
+                        <DataGridTemplateColumn Header="Type"
+                                                Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding Type}"/>
+                                        <Button Content="Membership"
+                                                Visibility="{Binding Type, Converter={StaticResource ButtonVisibilityConverter}}"
+                                                Command="{Binding ElementName=PeopleTab, Path=DataContext.OpenDescriptionWindowCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource MultibindConverter}">
+                                                    <Binding Path="MembershipStartDate"/>
+                                                    <Binding Path="MembershipEndDate"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </DockPanel>
         </TabItem>
     </TabControl>
 </Window>

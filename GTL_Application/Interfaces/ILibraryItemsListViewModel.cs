@@ -9,11 +9,7 @@ namespace GTL_Application.Interfaces
     {
         public void InitializeAll();
 
-        public void GetLibraryItemsList();
-
         public void GetFilteredLibraryItemsList();
-
-        public ObservableCollection<ILibraryItem> FilterList();
 
     }
 }

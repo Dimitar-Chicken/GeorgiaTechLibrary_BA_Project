@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace GTL_Test
+namespace GTL_Test.Helpers
 {
     [ExcludeFromCodeCoverage]
     public class DisposableImplementation : IDisposable
