@@ -2,6 +2,7 @@
 using GTL_Application.Interfaces;
 using GTL_Application.Services;
 using GTL_Application.ViewModel;
+using GTL_Test.Helpers;
 using GTL_Test.Mocks;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
