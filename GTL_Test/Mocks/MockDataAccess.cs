@@ -3,6 +3,8 @@ using GTL_Application.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Security;
 
 namespace GTL_Test.Mocks
 {
@@ -64,6 +66,81 @@ namespace GTL_Test.Mocks
             libraryItems.Add(libraryItem2);
 
             return libraryItems;
+        }
+
+        public ObservableCollection<IBorrowableBookCopy> GetBorrowableBookCopiesList()
+        {
+            ObservableCollection<IBorrowableBookCopy> borrowableBookCopies = new ObservableCollection<IBorrowableBookCopy>();
+
+            BorrowableBookCopy borrowableBookCopy1 = new BorrowableBookCopy
+            {
+                ID = ConvertToSecureString("42"),
+                Authors = "Jane Brow, Patrick Stewart",
+                Title = "Book of Pineapples"
+            };
+            borrowableBookCopies.Add(borrowableBookCopy1);
+
+            BorrowableBookCopy borrowableBookCopy2 = new BorrowableBookCopy
+            {
+                ID = ConvertToSecureString("17"),
+                Authors = "Ben Sonsen, Peter Larson",
+                Title = "Book of Cucumbers"
+            };
+            borrowableBookCopies.Add(borrowableBookCopy2);
+
+            return borrowableBookCopies;
+        }
+
+        public ObservableCollection<IPerson> GetPeople()
+        {
+            ObservableCollection<IPerson> people = new ObservableCollection<IPerson>();
+
+            Person person1 = new Person
+            {
+                SSN = new NetworkCredential("", "168805189225").SecurePassword,
+                PersonName = "John Doe",
+                Type = "Member",
+                Address = "Test Address #1",
+                Phone = "1234567890",
+                Email = "email1@example.com"
+            };
+            people.Add(person1);
+
+            Person person2 = new Person
+            {
+                SSN = new NetworkCredential("", "161104142128").SecurePassword,
+                PersonName = "Jane Boe",
+                Type = "Professor",
+                Address = "Test Address #2",
+                Phone = "0987654321",
+                Email = "email2@example.com"
+            };
+            people.Add(person2);
+
+            return people;
+        }
+
+        public bool CreateNewBookBorrow(SecureString SSN, IBorrowableBookCopy borrowableBookCopy)
+        {
+            if (borrowableBookCopy == null || SSN == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public SecureString ConvertToSecureString(string input)
+        {
+            if (input == null)
+                return null;
+
+            SecureString result = new SecureString();
+            foreach (char c in input)
+            {
+                result.AppendChar(c);
+            }
+
+            return result;
         }
     }
 }
