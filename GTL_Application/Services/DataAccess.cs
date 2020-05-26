@@ -8,6 +8,8 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace GTL_Application.Services
 {
@@ -149,6 +151,7 @@ namespace GTL_Application.Services
         public bool CreateNewBookBorrow(SecureString SSN, IBorrowableBookCopy borrowableBookCopy)
         {
             bool result = false;
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -196,16 +199,21 @@ namespace GTL_Application.Services
                     transaction.Commit();
                     result = true;
                 }
-                catch (Exception ex)
+                catch (SqlException sqlExeption)
                 {
                     try
                     {
                         transaction.Rollback();
                     }
-                    catch (Exception ex2)
+                    catch (InvalidOperationException invalidOperatioNException)
                     {
-
+                        Console.WriteLine(invalidOperatioNException);
+                        result = false;
+                        throw invalidOperatioNException;
                     }
+                    Console.WriteLine(sqlExeption);
+                    result = false;
+                    throw sqlExeption;
                 }
             }
 
