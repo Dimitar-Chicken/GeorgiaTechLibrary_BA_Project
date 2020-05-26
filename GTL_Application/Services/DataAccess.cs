@@ -148,7 +148,7 @@ namespace GTL_Application.Services
 
         public bool CreateNewBookBorrow(SecureString SSN, IBorrowableBookCopy borrowableBookCopy)
         {
-            int result = 0;
+            bool result = false;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -184,7 +184,7 @@ namespace GTL_Application.Services
 
                     //Preparing the SQL command and executing it.
                     command.CommandText = "INSERT INTO [LibraryItems].[Borrow]([BorrowerSSN],[BookCopy],[BorrowDate],[ReturnDate]) " +
-                                  "VALUES(@borrowerSSN,@bookCopy,@borrowDate,@returnDate)";
+                                          "VALUES(@borrowerSSN,@bookCopy,@borrowDate,@returnDate)";
                     command.Prepare();
                     command.ExecuteNonQuery();
                     command.CommandText = "UPDATE [LibraryItems].[BookCopy] " +
@@ -194,6 +194,7 @@ namespace GTL_Application.Services
                     command.ExecuteNonQuery();
 
                     transaction.Commit();
+                    result = true;
                 }
                 catch (Exception ex)
                 {
@@ -208,7 +209,7 @@ namespace GTL_Application.Services
                 }
             }
 
-            return result >= 0;
+            return result;
         }
 
         public static String ConvertSecureStringToString(SecureString input)
