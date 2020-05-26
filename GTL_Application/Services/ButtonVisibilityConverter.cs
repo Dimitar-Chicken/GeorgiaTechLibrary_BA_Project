@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using System.Windows;
@@ -22,6 +23,7 @@ namespace GTL_Application.Services
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

@@ -220,7 +220,7 @@
                                         <Label Content="{Binding Type}"/>
                                         <Button Content="Membership"
                                                 Visibility="{Binding Type, Converter={StaticResource ButtonVisibilityConverter}}"
-                                                Command="{Binding ElementName=PeopleTab, Path=DataContext.OpenDescriptionWindowCommand}">
+                                                Command="{Binding ElementName=PeopleTab, Path=DataContext.OpenMembershipWindowCommand}">
                                             <Button.CommandParameter>
                                                 <MultiBinding Converter="{StaticResource MultibindConverter}">
                                                     <Binding Path="MembershipStartDate"/>

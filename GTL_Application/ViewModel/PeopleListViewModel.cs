@@ -17,7 +17,7 @@ namespace GTL_Application.ViewModel
         private ObservableCollection<IPerson> _people;
         private ObservableCollection<IPerson> _filtered;
         private ICommand _getFilteredPeopleListCommand;
-        private ICommand _openDescriptionWindowCommand;
+        private ICommand _openMembershipWindowCommand;
 
         public PeopleListViewModel(IDataAccess dataAccess)
         {
@@ -57,11 +57,11 @@ namespace GTL_Application.ViewModel
             }
         }
 
-        public ICommand OpenDescriptionWindowCommand
+        public ICommand OpenMembershipWindowCommand
         {
             get
             {
-                return _openDescriptionWindowCommand ?? (_openDescriptionWindowCommand = new CommandHandlerWithParameters<object[]>((dates) => OpenDescriptionWindow(dates), () => true));
+                return _openMembershipWindowCommand ?? (_openMembershipWindowCommand = new CommandHandlerWithParameters<object[]>((dates) => OpenMembershipWindow(dates), () => true));
             }
         }
 
@@ -78,7 +78,7 @@ namespace GTL_Application.ViewModel
             }
         }
 
-        public void OpenDescriptionWindow(object[] dates)
+        public void OpenMembershipWindow(object[] dates)
         {
             ViewModelCarrier<object[]> viewModelCarrier = new ViewModelCarrier<object[]>(dates);
             Messenger.Default.Send(viewModelCarrier);
