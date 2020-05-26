@@ -79,7 +79,7 @@ namespace GTL_Test
                 result = action.viewModel;
             });
 
-            libraryItemsListViewModel.OpenItemDescriptionWindow(description);
+            libraryItemsListViewModel.OpenDescriptionWindowCommand.Execute(description);
 
             Assert.Equal(description, result);
         }
