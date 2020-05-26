@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,8 @@ namespace GTL_Application.View
     /// <summary>
     /// Interaction logic for PersonMembershipDatesWindow.xaml
     /// </summary>
+    /// 
+    [ExcludeFromCodeCoverage]
     public partial class PersonMembershipDatesWindow : Window
     {
         public PersonMembershipDatesWindow(object[] dates)

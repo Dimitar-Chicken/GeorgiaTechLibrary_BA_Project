@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using GTL_Application.Interfaces;
 using GTL_Application.Services;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +11,7 @@ namespace GTL_Application.View
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-
+    [ExcludeFromCodeCoverage]
     public partial class MainWindow : Window
     {
         public MainWindow(IMainWindowViewModel mainWindowViewModel, ILibraryItemsListViewModel libraryItemsListViewModel, IBorrowedItemsListViewModel borrowedItemsListViewModel, IPeopleListViewModel peopleListViewModel)
