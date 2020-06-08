@@ -29,7 +29,7 @@ namespace GTL_Test
 
         public IntegrationTests ()
         {
-            string path = @"C:\Users\anoobis\OneDrive - Professionshøjskolen UCN\Uni_stuff\6th_semester\0_SEMESTER_REPORT\DATABASE\GTLSetup.sql";
+            string path = Path.Combine(Environment.CurrentDirectory, "..\\..\\..\\..\\SQL_Scripts\\GTLSetup.sql");
 
             string connectionString = @"Server=ANOOBIS-DESKTOP\SQL2019;" +
                                           "Database=GeorgiaTechLibrary_BA_Project_DB;" +
